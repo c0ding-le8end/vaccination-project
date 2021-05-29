@@ -7,7 +7,7 @@ import 'package:vaccination_portal/networking/formatted_api.dart';
 
 class VaccineData
 {
-  String url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=560011&date=29-05-2021";
+  String url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=560011&date=30-05-2021";
  Future getdata() async
  {
    Response response=await get(Uri.encodeFull(url));

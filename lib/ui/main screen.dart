@@ -29,7 +29,8 @@ class _SampleState extends State<Sample> {
             scrollDirection:Axis.vertical,
             itemBuilder: (context,int index)
             {
-              return Container(child: Center(child: Text("${snapshot.data.sessions[index].name}"),),);
+              return Container(
+                child: Center(child: Text("${snapshot.data.sessions[index].name}"),),);
             }
             ,);
         }
