@@ -7,9 +7,10 @@ import 'package:vaccination_portal/networking/formatted_api.dart';
 
 class VaccineData
 {
-  String url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=560011&date=30-05-2021";
- Future getdata() async
+
+ Future<VaccineObject> getdata({String pincode}) async
  {
+   var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+pincode+"&date=01-06-2021";
    Response response=await get(Uri.encodeFull(url));
    if(response.statusCode==200)
      {
