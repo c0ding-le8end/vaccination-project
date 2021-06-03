@@ -1,11 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vaccination_portal/networking/api.dart';
+
 import 'package:vaccination_portal/networking/formatted_api.dart';
 import 'package:vaccination_portal/ui/schedule_screen.dart';
+
+import 'sign_up.dart';
+
+
 class Sample extends StatefulWidget {
-  const Sample({Key key}) : super(key: key);
+  const Sample({Key key, }) : super(key: key);
+
 
   @override
   _SampleState createState() => _SampleState();
@@ -14,12 +22,56 @@ class Sample extends StatefulWidget {
 class _SampleState extends State<Sample> {
   Future<VaccineObject> vList;
   String _pincode="560078";
-  _schedule() {
-    debugPrint("Schedule");
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User user;
+  bool isloggedin = false;
+  Stream<DocumentSnapshot> userStream;
+
+  checkAuthentification() async {
+    _auth.authStateChanges().listen((user) {
+      if (user == null) {
+        Navigator.of(context).pushReplacementNamed("Login");
+      }
+    });
   }
+
+  getUser() async {
+    User firebaseUser = _auth.currentUser;
+    await firebaseUser?.reload();
+    firebaseUser = _auth.currentUser;
+
+    if (firebaseUser != null) {
+      setState(() {
+        this.user = firebaseUser;
+        this.isloggedin = true;
+        userStream=FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).snapshots();
+        if(userStream==null)
+          {
+            setState(() {
+              userStream=  FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).snapshots();
+            });
+          }
+      });
+    }
+  }
+
+  signOut() async {
+    _auth.signOut();
+
+
+  }
+
+
+
+
+
   @override
   void initState() {
     vList = VaccineData().getdata(pincode:_pincode);
+    this.checkAuthentification();
+    this.getUser();
+
+
     super.initState();
   }
 
@@ -76,7 +128,7 @@ class _SampleState extends State<Sample> {
                   fontSize: 16,
                   color: Colors.white
               )),
-              onTap: ()=>debugPrint("Test1"),
+              onTap: signOut,
               tileColor: Colors.blue.shade900,
             )
           ],
@@ -86,10 +138,27 @@ class _SampleState extends State<Sample> {
       FutureBuilder(
         future: vList, builder: (context, AsyncSnapshot<VaccineObject> snapshot) {
         if (snapshot.hasData) {
-          return InkWell(
-            borderRadius: BorderRadius.circular(10),
-            //Heading and Mobile No
-            child: Container(
+          return StreamBuilder<DocumentSnapshot>(
+            stream: userStream,
+            builder: (context, snapshot) {
+              if(snapshot.hasData && snapshot.data.data()!=null)
+              return userCard(context,snapshot);
+              else
+                return CircularProgressIndicator();
+            }
+          );
+           //Hospital_View(context,snapshot);
+        }
+        else
+          return Container(child: Center(child: CircularProgressIndicator(),));
+      },),
+    );
+  }
+
+  Container userCard(BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot) {
+    Map<String, dynamic> documentFields=snapshot.data.data();
+    var name=documentFields['name'];
+    return Container(
               width: MediaQuery.of(context).size.width,
               height: 550,
               decoration: BoxDecoration(
@@ -165,7 +234,7 @@ class _SampleState extends State<Sample> {
                                    child: Row(
                                      mainAxisAlignment: MainAxisAlignment.start,
                                      children: <Widget>[
-                                       Text("Adithya N ",style: TextStyle(
+                                       Text("$name ",style: TextStyle(
                                          fontWeight: FontWeight.bold,
                                          fontSize: 20,
                                          color: Colors.blue.shade900
@@ -233,7 +302,7 @@ class _SampleState extends State<Sample> {
                                        ),
                                        //Schedule Button-Navigates to Scheduling screen
                                        Padding(
-                                         padding: const EdgeInsets.only(left:180.0),
+                                         padding: const EdgeInsets.only(left:160.0),
                                          child: RaisedButton(
                                             onPressed: () => {
                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Pincode()))
@@ -272,14 +341,7 @@ class _SampleState extends State<Sample> {
                    ],
                  ),
                ),
-            ),
-          );
-           //Hospital_View(context,snapshot);
-        }
-        else
-          return Container(child: Center(child: CircularProgressIndicator(),));
-      },),
-    );
+            );
   }
 }
 
