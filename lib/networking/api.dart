@@ -5,12 +5,20 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:vaccination_portal/networking/formatted_api.dart';
 
+import '../random.dart';
+
 class VaccineData
 {
 
- Future<VaccineObject> getdata({String pincode}) async
+
+ Future<VaccineObject> getdata({String pincode, var date}) async
  {
-   var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+pincode+"&date=01-06-2021";
+   var today = Date_Get.getCurrentDate();
+   var newDate=Date_Get.getNewDate();
+
+   var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+pincode+"&date="+newDate;
+   print("$url");
+   //var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=%22+pincode+%22&date=%22+$today";
    Response response=await get(Uri.encodeFull(url));
    if(response.statusCode==200)
      {

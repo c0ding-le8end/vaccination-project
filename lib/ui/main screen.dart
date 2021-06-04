@@ -21,7 +21,7 @@ class Sample extends StatefulWidget {
 
 class _SampleState extends State<Sample> {
   Future<VaccineObject> vList;
-  String _pincode="560078";
+  // String _pincode="560078";
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User user;
   bool isloggedin = false;
@@ -67,7 +67,7 @@ class _SampleState extends State<Sample> {
 
   @override
   void initState() {
-    vList = VaccineData().getdata(pincode:_pincode);
+    // vList = VaccineData().getdata(pincode:_pincode);
     this.checkAuthentification();
     this.getUser();
 
@@ -135,10 +135,7 @@ class _SampleState extends State<Sample> {
         ) ,
       ),
       body:
-      FutureBuilder(
-        future: vList, builder: (context, AsyncSnapshot<VaccineObject> snapshot) {
-        if (snapshot.hasData) {
-          return StreamBuilder<DocumentSnapshot>(
+      StreamBuilder<DocumentSnapshot>(
             stream: userStream,
             builder: (context, snapshot) {
               if(snapshot.hasData && snapshot.data.data()!=null)
@@ -146,12 +143,10 @@ class _SampleState extends State<Sample> {
               else
                 return CircularProgressIndicator();
             }
-          );
+          )
            //Hospital_View(context,snapshot);
-        }
-        else
-          return Container(child: Center(child: CircularProgressIndicator(),));
-      },),
+
+
     );
   }
 
