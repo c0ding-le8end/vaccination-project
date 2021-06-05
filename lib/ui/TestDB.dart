@@ -28,7 +28,7 @@ class _DatabaseCheckState extends State<DatabaseCheck> {
               Map<String, dynamic> documentFields=snapshot.data.data();
               //userHistoryList=documentFields['name1'];
               return Container(
-                child: Center(child: Text("${documentFields['name1']}")),
+                child: Center(child: Text("${documentFields['name3']}")),
               );
             }
           else

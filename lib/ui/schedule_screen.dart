@@ -65,8 +65,8 @@ class _PincodeState extends State<Pincode> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ScheduleScreen(
-                                        pincode: _pincode,
-                                      )));
+                                    pincode: _pincode,
+                                  )));
                         });
                       },
                     ),
@@ -152,8 +152,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: snapshot.data.sessions[index]
-                                                  .availableCapacity ==
-                                              0
+                                          .availableCapacity ==
+                                          0
                                           ? Colors.black
                                           : Colors.green,
                                       fontSize: 16),
@@ -163,7 +163,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
-                                  //height: 50,
+                                //height: 50,
                                   width: MediaQuery.of(context).size.width,
                                   child: Row(
                                     children: [
@@ -193,8 +193,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             } else
               return Container(
                   child: Center(
-                child: Text("Enter Valid Pincode"),
-              ));
+                    child: Text("Enter Valid Pincode"),
+                  ));
           },
         ),
         onTap: () => debugPrint("Test"),

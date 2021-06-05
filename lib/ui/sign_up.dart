@@ -40,9 +40,9 @@ class _SignUpState extends State<SignUp> {
           // updateuser.displayName = _name;
           //  user.updateProfile(updateuser);
           await _auth.currentUser.updateProfile(displayName: _name);
-           userDetails=user.user;
-           await FirebaseFirestore.instance.collection("users").doc(userDetails.uid).set({"name":_name});
-          
+          userDetails=user.user;
+          await FirebaseFirestore.instance.collection("users").doc(userDetails.uid).set({"name":_name});
+
           // await Navigator.pushReplacementNamed(context,"/") ;
 
         }

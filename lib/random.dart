@@ -11,9 +11,9 @@ class Date_Get
     var formatter = new DateFormat('dd-MM-yyyy');
     return formatter.format(now);
   }
-  static getNewDate()
+  static getNewDate(int num)
   {
-    var newDate= DateTime.now().add(new Duration(days: 0));
+    var newDate= DateTime.now().add(new Duration(days: num));
     var formatter = new DateFormat('dd-MM-yyyy');
     return formatter.format(newDate);
   }

@@ -11,22 +11,22 @@ class VaccineData
 {
 
 
- Future<VaccineObject> getdata({String pincode, var date}) async
- {
-   var today = Date_Get.getCurrentDate();
-   var newDate=Date_Get.getNewDate();
+  Future<VaccineObject> getdata({String pincode, var date}) async
+  {
+    var today = Date_Get.getCurrentDate();
+    var newDate=Date_Get.getNewDate(0);
 
-   var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+pincode+"&date="+newDate;
-   print("$url");
-   //var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=%22+pincode+%22&date=%22+$today";
-   Response response=await get(Uri.encodeFull(url));
-   if(response.statusCode==200)
-     {
-        return VaccineObject.fromJson(json.decode(response.body));
-     }
-   else
-     {
-       throw Exception("Error recieving data");
-     }
- }
+    var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+pincode+"&date="+newDate;
+    print("$url");
+    //var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=%22+pincode+%22&date=%22+$today";
+    Response response=await get(Uri.encodeFull(url));
+    if(response.statusCode==200)
+    {
+      return VaccineObject.fromJson(json.decode(response.body));
+    }
+    else
+    {
+      throw Exception("Error recieving data");
+    }
+  }
 }

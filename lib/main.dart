@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:vaccination_portal/ui/TestDB.dart';
 import 'package:vaccination_portal/ui/loading_screen.dart';
 import 'package:vaccination_portal/ui/main%20screen.dart';
+import 'package:vaccination_portal/ui/real_time.dart';
 import 'package:vaccination_portal/ui/schedule_screen.dart';
 import 'package:vaccination_portal/ui/sign_in.dart';
 import 'package:vaccination_portal/ui/sign_up.dart';
