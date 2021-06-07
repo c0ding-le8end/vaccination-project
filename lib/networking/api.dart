@@ -14,8 +14,8 @@ class VaccineData
   Future<VaccineObject> getdata({String pincode, var date}) async
   {
     var today = Date_Get.getCurrentDate();
-    var newDate=Date_Get.getNewDate(0);
-
+    //var newDate=Date_Get.getNewDate(0);
+    var newDate= date==null?Date_Get.getNewDate(0):date;
     var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+pincode+"&date="+newDate;
     print("$url");
     //var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=%22+pincode+%22&date=%22+$today";

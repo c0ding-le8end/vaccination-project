@@ -10,6 +10,8 @@ import 'package:vaccination_portal/ui/schedule_screen.dart';
 
 import 'sign_up.dart';
 
+String userName;
+
 
 class Sample extends StatefulWidget {
   const Sample({Key key, }) : super(key: key);
@@ -43,6 +45,7 @@ class _SampleState extends State<Sample> {
     if (firebaseUser != null) {
       setState(() {
         this.user = firebaseUser;
+        userDetails=firebaseUser;
         this.isloggedin = true;
         userStream=FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).snapshots();
         if(userStream==null)
@@ -153,6 +156,7 @@ class _SampleState extends State<Sample> {
   Container userCard(BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot) {
     Map<String, dynamic> documentFields=snapshot.data.data();
     var name=documentFields['name'];
+    userName=name;
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 550,

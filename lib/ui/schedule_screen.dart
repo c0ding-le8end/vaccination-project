@@ -3,6 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vaccination_portal/networking/api.dart';
 import 'package:vaccination_portal/networking/formatted_api.dart';
 import 'package:vaccination_portal/ui/calender.dart';
+import 'package:vaccination_portal/ui/hospital_details.dart';
+
+import '../random.dart';
 
 class Pincode extends StatefulWidget {
   const Pincode({Key key}) : super(key: key);
@@ -83,21 +86,22 @@ class _PincodeState extends State<Pincode> {
   }
 }
 
+String selectedPincode;
+
 class ScheduleScreen extends StatefulWidget {
   final String pincode;
-
-  const ScheduleScreen({Key key, this.pincode}) : super(key: key);
+  final String currentDate;
+  const ScheduleScreen({Key key, this.pincode, this.currentDate}) : super(key: key);
 
   @override
-  _ScheduleScreenState createState() => _ScheduleScreenState(pincode);
+  _ScheduleScreenState createState() => _ScheduleScreenState(pincode,currentDate);
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   Future<VaccineObject> vlist;
   final String _pincode;
-
-  _ScheduleScreenState(this._pincode);
-
+  final String _currentDate;
+  _ScheduleScreenState(this._pincode,this._currentDate);
   @override
   // TODO: implement widget
   ScheduleScreen get widget {
@@ -108,7 +112,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    vlist = getpincode(pincode: _pincode);
+    selectedPincode=_pincode;
+    vlist = getpincode(pincode: _pincode,date: _currentDate);
   }
 
   @override
@@ -126,18 +131,19 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               }))
         ],
       ),
-      body: InkWell(
-        child: FutureBuilder(
-          future: vlist,
-          builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data.sessions.length,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, int index) {
-                  return Container(
-                      width: MediaQuery.of(context).size.width,
-                      //color: Colors.blue,
+      body: FutureBuilder(
+        future: vlist,
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data.sessions.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, int index) {
+                var hospitalName = snapshot.data.sessions[index].name;
+                return Container(
+                    width: MediaQuery.of(context).size.width,
+                    //color: Colors.blue,
+                    child: InkWell(
                       child: Card(
                         //color: Colors.blue.shade900,
                         child: Column(
@@ -148,7 +154,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: Row(children: <Widget>[
                                 Text(
-                                  "${snapshot.data.sessions[index].name}",
+                                  "${hospitalName}",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: snapshot.data.sessions[index]
@@ -187,21 +193,25 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             // ),
                           ],
                         ),
-                      ));
-                },
-              );
-            } else
-              return Container(
-                  child: Center(
-                    child: Text("Enter Valid Pincode"),
-                  ));
-          },
-        ),
-        onTap: () => debugPrint("Test"),
+                      ),
+                    onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder:(context) =>HospitalDetails(hospitalName: hospitalName))),
+                    ),
+                );
+              },
+            );
+          } else
+            return Container(
+                child: Center(
+                  child: Text("Enter Valid Pincode"),
+                ));
+        },
       ),
     );
   }
 
-  Future<VaccineObject> getpincode({String pincode}) =>
-      VaccineData().getdata(pincode: pincode);
+  Future<VaccineObject> getpincode({String pincode,String date}) =>
+      VaccineData().getdata(pincode: pincode,date: date);
 }
+
+
+

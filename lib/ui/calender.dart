@@ -5,6 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vaccination_portal/random.dart';
+import 'package:vaccination_portal/ui/schedule_screen.dart';
+
+String chosenDate;
 
 class Calender extends StatefulWidget {
   const Calender({Key key}) : super(key: key);
@@ -29,7 +32,14 @@ class _CalenderState extends State<Calender> {
             onPressed: () {
               Navigator.of(context).pop();
             },
+            child: Text('Cancel')),
+        FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) =>ScheduleScreen(pincode:selectedPincode,currentDate: chosenDate)));
+            },
             child: Text('OK'))
+        ,
       ],
     );
   }
@@ -88,7 +98,9 @@ class _RadioListBuilderState extends State<RadioListBuilder> {
               setState(() {
                 init_date=data.date;
                 id=data.index;
-              });
+              }
+              );
+              chosenDate=init_date;
             })).toList(),
         )
 
