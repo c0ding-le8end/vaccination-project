@@ -11,8 +11,7 @@ import 'package:vaccination_portal/ui/schedule_screen.dart';
 import 'sign_up.dart';
 
 String userName;
-
-
+int statusIndex=0;
 class Sample extends StatefulWidget {
   const Sample({Key key, }) : super(key: key);
 
@@ -320,17 +319,57 @@ class _SampleState extends State<Sample> {
                             )
                         ),
                         //Appointment Status
+                        // Padding(
+                        //   padding: const EdgeInsets.only(left:15),
+                        //   child: Row(
+                        //     children: <Widget>[
+                        //       Text("Appointment not scheduled",style: TextStyle(
+                        //           color: Colors.red,
+                        //           fontSize: 16
+                        //       ),)
+                        //     ],
+                        //   ),
+                        // ),
+                        //Dose 2 Schedule
                         Padding(
-                          padding: const EdgeInsets.only(left:15),
-                          child: Row(
-                            children: <Widget>[
-                              Text("Appointment not scheduled",style: TextStyle(
+                            padding: const EdgeInsets.only(top:8.0),
+                            //Booking window
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Icon(
+                                  FontAwesomeIcons.syringe,
+                                  size: 25,
                                   color: Colors.red,
-                                  fontSize: 16
-                              ),)
-                            ],
-                          ),
-                        )
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left :10.0),
+                                  child: Text("Dose 2",style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15
+                                  ),),
+                                ),
+                                //Schedule Button-Navigates to Scheduling screen
+                                Padding(
+                                  padding: const EdgeInsets.only(left:160.0),
+                                  child: RaisedButton(
+                                    onPressed: () => {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Pincode()))
+                                    },
+                                    color: Colors.blue.shade900,
+                                    child: Text("Schedule",style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.white
+                                    ),),
+                                    shape: ContinuousRectangleBorder(
+                                        borderRadius: BorderRadius.circular(18)),
+                                  ),
+                                ),
+                              ],
+                            )
+                        ),
                       ],
                     ),
                   ),

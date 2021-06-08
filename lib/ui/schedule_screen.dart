@@ -68,8 +68,8 @@ class _PincodeState extends State<Pincode> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ScheduleScreen(
-                                    pincode: _pincode,
-                                  )));
+                                        pincode: _pincode,
+                                      )));
                         });
                       },
                     ),
@@ -91,17 +91,22 @@ String selectedPincode;
 class ScheduleScreen extends StatefulWidget {
   final String pincode;
   final String currentDate;
-  const ScheduleScreen({Key key, this.pincode, this.currentDate}) : super(key: key);
+
+  const ScheduleScreen({Key key, this.pincode, this.currentDate})
+      : super(key: key);
 
   @override
-  _ScheduleScreenState createState() => _ScheduleScreenState(pincode,currentDate);
+  _ScheduleScreenState createState() =>
+      _ScheduleScreenState(pincode, currentDate);
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   Future<VaccineObject> vlist;
   final String _pincode;
   final String _currentDate;
-  _ScheduleScreenState(this._pincode,this._currentDate);
+
+  _ScheduleScreenState(this._pincode, this._currentDate);
+
   @override
   // TODO: implement widget
   ScheduleScreen get widget {
@@ -112,8 +117,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    selectedPincode=_pincode;
-    vlist = getpincode(pincode: _pincode,date: _currentDate);
+    selectedPincode = _pincode;
+    vlist = getpincode(pincode: _pincode, date: _currentDate);
   }
 
   @override
@@ -125,10 +130,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         actions: [
           IconButton(
               icon: Icon(FontAwesomeIcons.calendar),
-              onPressed: () => showDialog(context: context, builder: (context)
-              {
-                return Calender();
-              }))
+              onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Calender();
+                  }))
         ],
       ),
       body: FutureBuilder(
@@ -140,78 +146,92 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               scrollDirection: Axis.vertical,
               itemBuilder: (context, int index) {
                 var hospitalName = snapshot.data.sessions[index].name;
+                String hospitalAddress = snapshot.data.sessions[index].address;
+                String block = snapshot.data.sessions[index].blockName;
+                String district = snapshot.data.sessions[index].districtName;
+                String state = snapshot.data.sessions[index].stateName;
+                String vaccine = snapshot.data.sessions[index].vaccine;
+                List<String> slots = snapshot.data.sessions[index].slots;
+                int dose1 = snapshot.data.sessions[index].availableCapacityDose1;
                 return Container(
-                    width: MediaQuery.of(context).size.width,
-                    //color: Colors.blue,
-                    child: InkWell(
-                      child: Card(
-                        //color: Colors.blue.shade900,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(children: <Widget>[
-                                Text(
-                                  "${hospitalName}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: snapshot.data.sessions[index]
-                                          .availableCapacity ==
-                                          0
-                                          ? Colors.black
-                                          : Colors.green,
-                                      fontSize: 16),
-                                ),
-                              ]),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  //color: Colors.blue,
+                  child: InkWell(
+                    child: Card(
+                      //color: Colors.blue.shade900,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(children: <Widget>[
+                              Text(
+                                "${hospitalName}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: snapshot.data.sessions[index]
+                                                .availableCapacity ==
+                                            0
+                                        ? Colors.black
+                                        : Colors.green,
+                                    fontSize: 16),
+                              ),
+                            ]),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
                                 //height: 50,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                          child: Text(
-                                              "${snapshot.data.sessions[index].address}",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.black))),
-                                      Text(
-                                          "${snapshot.data.sessions[index].blockName}")
-                                      //Text("${snapshot.data.sessions[index].blockName}"),
-                                    ],
-                                  )),
-                            ),
-                            // Padding(
-                            //   padding: const EdgeInsets.only(top :8.0,bottom: 8),
-                            //   child: Container(
-                            //     height: 0.5, color: Colors.grey,
-                            //   ),
-                            // ),
-                          ],
-                        ),
+                                width: MediaQuery.of(context).size.width,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        child: Text(
+                                            "${snapshot.data.sessions[index].address}",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black))),
+                                    Text(
+                                        "${snapshot.data.sessions[index].blockName}")
+                                    //Text("${snapshot.data.sessions[index].blockName}"),
+                                  ],
+                                )),
+                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top :8.0,bottom: 8),
+                          //   child: Container(
+                          //     height: 0.5, color: Colors.grey,
+                          //   ),
+                          // ),
+                        ],
                       ),
-                    onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder:(context) =>HospitalDetails(hospitalName: hospitalName))),
                     ),
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => HospitalDetails(
+                              hospitalName: hospitalName,
+                              hospitalAddress: hospitalAddress,
+                              district: district,
+                              state: state,
+                              slots: slots,
+                              dose1: dose1,
+                              block: block,
+                              vaccine: vaccine,
+                            ))),
+                  ),
                 );
               },
             );
           } else
             return Container(
                 child: Center(
-                  child: Text("Enter Valid Pincode"),
-                ));
+              child: Text("Enter Valid Pincode"),
+            ));
         },
       ),
     );
   }
 
-  Future<VaccineObject> getpincode({String pincode,String date}) =>
-      VaccineData().getdata(pincode: pincode,date: date);
+  Future<VaccineObject> getpincode({String pincode, String date}) =>
+      VaccineData().getdata(pincode: pincode, date: date);
 }
-
-
-
