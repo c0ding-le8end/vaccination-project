@@ -11,9 +11,10 @@ import 'package:vaccination_portal/ui/schedule_screen.dart';
 import 'sign_up.dart';
 
 String userName;
-int statusIndex=0;
+int statusIndex = 0;
+
 class Sample extends StatefulWidget {
-  const Sample({Key key, }) : super(key: key);
+  const Sample({Key key,}) : super(key: key);
 
 
   @override
@@ -22,6 +23,7 @@ class Sample extends StatefulWidget {
 
 class _SampleState extends State<Sample> {
   Future<VaccineObject> vList;
+
   // String _pincode="560078";
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User user;
@@ -44,13 +46,15 @@ class _SampleState extends State<Sample> {
     if (firebaseUser != null) {
       setState(() {
         this.user = firebaseUser;
-        userDetails=firebaseUser;
+        userDetails = firebaseUser;
         this.isloggedin = true;
-        userStream=FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).snapshots();
-        if(userStream==null)
-        {
+        userStream = FirebaseFirestore.instance.collection("users")
+            .doc(firebaseUser.uid)
+            .snapshots();
+        if (userStream == null) {
           setState(() {
-            userStream=  FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).snapshots();
+            userStream = FirebaseFirestore.instance.collection("users").doc(
+                firebaseUser.uid).snapshots();
           });
         }
       });
@@ -59,12 +63,7 @@ class _SampleState extends State<Sample> {
 
   signOut() async {
     _auth.signOut();
-
-
   }
-
-
-
 
 
   @override
@@ -84,16 +83,16 @@ class _SampleState extends State<Sample> {
       backgroundColor: Colors.blue.shade900,
     ),
         drawer: Drawer(
-          child:ListView(
+          child: ListView(
             children: <Widget>[
               Container(
                 height: 70,
-                child: DrawerHeader(decoration:BoxDecoration(
+                child: DrawerHeader(decoration: BoxDecoration(
                     color: Colors.blue.shade900
                 ),
-                  child:Padding(
-                    padding: const EdgeInsets.only(top:8.0),
-                    child: Text("Drawer Header",style: TextStyle(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text("Drawer Header", style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
                     ),),
@@ -102,11 +101,11 @@ class _SampleState extends State<Sample> {
                 ),
               ),
               ListTile(
-                title: Text("Profile",style: TextStyle(
+                title: Text("Profile", style: TextStyle(
                     fontSize: 16,
                     color: Colors.white
                 )),
-                onTap: ()=>debugPrint("Test1"),
+                onTap: () => debugPrint("Test1"),
                 tileColor: Colors.blue.shade900,
               ),
               // ListTile(
@@ -126,7 +125,7 @@ class _SampleState extends State<Sample> {
               //   tileColor: Colors.blue.shade900,
               // ),
               ListTile(
-                title: Text("Logout",style: TextStyle(
+                title: Text("Logout", style: TextStyle(
                     fontSize: 16,
                     color: Colors.white
                 )),
@@ -134,14 +133,14 @@ class _SampleState extends State<Sample> {
                 tileColor: Colors.blue.shade900,
               )
             ],
-          ) ,
+          ),
         ),
         body:
         StreamBuilder<DocumentSnapshot>(
             stream: userStream,
             builder: (context, snapshot) {
-              if(snapshot.hasData && snapshot.data.data()!=null)
-                return userCard(context,snapshot);
+              if (snapshot.hasData && snapshot.data.data() != null)
+                return userCard(context, snapshot);
               else
                 return CircularProgressIndicator();
             }
@@ -152,12 +151,19 @@ class _SampleState extends State<Sample> {
     );
   }
 
-  Container userCard(BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot) {
-    Map<String, dynamic> documentFields=snapshot.data.data();
-    var name=documentFields['name'];
-    userName=name;
+  Container userCard(BuildContext context,
+      AsyncSnapshot<DocumentSnapshot> snapshot) {
+    Map<String, dynamic> documentFields = snapshot.data.data();
+    var name = documentFields['name'];
+    userName = name;
+    var phoneNumber = documentFields['phoneNumber'];
+    var age = documentFields['age'];
+    var aadharNumber = documentFields['aadharNumber'];
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       height: 550,
       decoration: BoxDecoration(
         //color: Colors.amberAccent,
@@ -189,7 +195,7 @@ class _SampleState extends State<Sample> {
               children: <Widget>[
                 Flexible(child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Registered Mobile Number: XXX-XXX-0971",
+                  child: Text("Registered Mobile Number: $phoneNumber",
                     style: TextStyle(
                         fontSize: 18,
                         //fontWeight: FontWeight.bold,
@@ -201,9 +207,12 @@ class _SampleState extends State<Sample> {
             ),
             //Card to show Patient Details
             Padding(
-              padding: const EdgeInsets.symmetric(vertical:8.0),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Container(
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 height: 400,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(2),
@@ -219,7 +228,7 @@ class _SampleState extends State<Sample> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text("Not Vaccinated",style: TextStyle(
+                            Text("Not Vaccinated", style: TextStyle(
                               backgroundColor: Colors.amberAccent.shade200,
                               fontWeight: FontWeight.w600,
                               fontSize: 18,
@@ -227,38 +236,44 @@ class _SampleState extends State<Sample> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top:8.0),
+                          padding: const EdgeInsets.only(top: 8.0),
                           //Name
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text("$name ",style: TextStyle(
+                              Text("$name ", style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
                                   color: Colors.blue.shade900
                               ),),
+                              Icon(documentFields['gender'] == 'Male'
+                                  ? FontAwesomeIcons.male
+                                  : FontAwesomeIcons.female,
+                                  color: documentFields['gender'] == 'Male'
+                                      ? Colors.blue.shade900
+                                      :Colors.pinkAccent)
                             ],
                           ),
                         ),
                         //REF ID and Secret Code
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Text("REF ID : 92188649098090 ",style: TextStyle(
-                                fontSize: 16
-                            ),),
-                            Text("| Secret Code : 8090",style: TextStyle(
-                                fontSize: 16
-                            ),)
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.start,
+                        //   children: <Widget>[
+                        //     Text("REF ID : 92188649098090 ",style: TextStyle(
+                        //         fontSize: 16
+                        //     ),),
+                        //     Text("| Secret Code : 8090",style: TextStyle(
+                        //         fontSize: 16
+                        //     ),)
+                        //   ],
+                        // ),
                         Padding(
-                          padding: const EdgeInsets.only(top :6.0),
+                          padding: const EdgeInsets.only(top: 6.0),
                           //Year of Birth Photo ID: Aadhaar Card  ID Number:
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Text("Year of Birth: 2001 ",style: TextStyle(
+                              Text("Age: $age ", style: TextStyle(
                                   fontSize: 17
                               ),)
                             ],
@@ -267,20 +282,21 @@ class _SampleState extends State<Sample> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text("Photo ID: Aadhaar Card  ID Number:XXXX-4971",style: TextStyle(
-                                fontSize: 17
-                            ),),
+                            Text("Aadhaar Card  ID Number:$aadharNumber",
+                              style: TextStyle(
+                                  fontSize: 17
+                              ),),
                           ],
                         ),
                         //Horizontal Line
                         Padding(
-                          padding: const EdgeInsets.only(top :8.0),
+                          padding: const EdgeInsets.only(top: 8.0),
                           child: Container(
                             height: 0.5, color: Colors.grey,
                           ),
                         ),
                         Padding(
-                            padding: const EdgeInsets.only(top:8.0),
+                            padding: const EdgeInsets.only(top: 8.0),
                             //Booking window
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -291,8 +307,8 @@ class _SampleState extends State<Sample> {
                                   color: Colors.red,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left :10.0),
-                                  child: Text("Dose 1",style: TextStyle(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Text("Dose 1", style: TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15
@@ -300,19 +316,22 @@ class _SampleState extends State<Sample> {
                                 ),
                                 //Schedule Button-Navigates to Scheduling screen
                                 Padding(
-                                  padding: const EdgeInsets.only(left:160.0),
+                                  padding: const EdgeInsets.only(left: 160.0),
                                   child: RaisedButton(
-                                    onPressed: () => {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Pincode()))
+                                    onPressed: () =>
+                                    {
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) => Pincode()))
                                     },
                                     color: Colors.blue.shade900,
-                                    child: Text("Schedule",style: TextStyle(
+                                    child: Text("Schedule", style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                         color: Colors.white
                                     ),),
                                     shape: ContinuousRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18)),
+                                        borderRadius: BorderRadius.circular(
+                                            18)),
                                   ),
                                 ),
                               ],
@@ -332,7 +351,7 @@ class _SampleState extends State<Sample> {
                         // ),
                         //Dose 2 Schedule
                         Padding(
-                            padding: const EdgeInsets.only(top:8.0),
+                            padding: const EdgeInsets.only(top: 8.0),
                             //Booking window
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -343,8 +362,8 @@ class _SampleState extends State<Sample> {
                                   color: Colors.red,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left :10.0),
-                                  child: Text("Dose 2",style: TextStyle(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Text("Dose 2", style: TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15
@@ -352,19 +371,22 @@ class _SampleState extends State<Sample> {
                                 ),
                                 //Schedule Button-Navigates to Scheduling screen
                                 Padding(
-                                  padding: const EdgeInsets.only(left:160.0),
+                                  padding: const EdgeInsets.only(left: 160.0),
                                   child: RaisedButton(
-                                    onPressed: () => {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Pincode()))
+                                    onPressed: () =>
+                                    {
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) => Pincode()))
                                     },
                                     color: Colors.blue.shade900,
-                                    child: Text("Schedule",style: TextStyle(
+                                    child: Text("Schedule", style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                         color: Colors.white
                                     ),),
                                     shape: ContinuousRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18)),
+                                        borderRadius: BorderRadius.circular(
+                                            18)),
                                   ),
                                 ),
                               ],
@@ -384,16 +406,8 @@ class _SampleState extends State<Sample> {
 }
 
 
-
-
-
-
-
 // onPressed: () => {
 // Navigator.push(context, MaterialPageRoute(builder: (context)=>Pincode()))
-
-
-
 
 
 // Widget Hospital_View(context,snapshot)
