@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vaccination_portal/ui/main%20screen.dart';
 
 User userDetails;
+
 class SignUp extends StatefulWidget {
   @override
   _SignUpState createState() => _SignUpState();
@@ -13,7 +15,7 @@ class _SignUpState extends State<SignUp> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _name, _email, _password, _gender, _phoneNumber,_age,_aadharNumber;
+  String _name, _email, _password, _gender, _phoneNumber, _age, _aadharNumber;
 
   checkAuthentication() async {
     _auth.authStateChanges().listen((user) async {
@@ -42,10 +44,26 @@ class _SignUpState extends State<SignUp> {
           //  user.updateProfile(updateuser);
           await _auth.currentUser.updateProfile(displayName: _name);
           userDetails = user.user;
+          statusIndex=0;
           await FirebaseFirestore.instance
               .collection("users")
               .doc(userDetails.uid)
-              .set({"name": _name,"gender":_gender,"phoneNumber":_phoneNumber,"age":_age,"aadharNumber":_aadharNumber});
+              .set({
+            "details": {
+              "name": _name,
+              "gender": _gender,
+              "phoneNumber": _phoneNumber,
+              "age": _age,
+              "aadharNumber": _aadharNumber
+            },
+            "Vaccine": {
+
+                "dose1": {"status": "Not Vaccinated", "name": _name},
+
+                "dose2": {"status": "Not Vaccinated", "name": _name}
+
+            }
+          });
           // await Navigator.pushReplacementNamed(context,"/") ;
 
         }
@@ -125,7 +143,7 @@ class _SignUpState extends State<SignUp> {
                         width: MediaQuery.of(context).size.width,
                         child: DropdownButtonFormField<String>(
                           validator: (input) {
-                            if (input==null) return 'Enter Gender';
+                            if (input == null) return 'Enter Gender';
                           },
                           decoration: InputDecoration(
                               labelText: "Gender",
@@ -140,11 +158,8 @@ class _SignUpState extends State<SignUp> {
                               _gender = newValue;
                             });
                           },
-                          items: <String>[
-                            'Male',
-                            'Female',
-                            'Other'
-                          ].map<DropdownMenuItem<String>>((String value) {
+                          items: <String>['Male', 'Female', 'Other']
+                              .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
@@ -154,8 +169,10 @@ class _SignUpState extends State<SignUp> {
                     Container(
                       child: TextFormField(
                           validator: (input) {
-                            bool checkSpecial=isSpecial(input);
-                            if (input.isEmpty||input.length!=10||checkSpecial) return 'Enter Valid Phone Number';
+                            bool checkSpecial = isSpecial(input);
+                            if (input.isEmpty ||
+                                input.length != 10 ||
+                                checkSpecial) return 'Enter Valid Phone Number';
                           },
                           decoration: InputDecoration(
                             labelText: 'Phone Number',
@@ -167,9 +184,12 @@ class _SignUpState extends State<SignUp> {
                     Container(
                       child: TextFormField(
                           validator: (input) {
-                            bool checkSpecial=isSpecial(input);
+                            bool checkSpecial = isSpecial(input);
                             //Parse INT works only inside IF not outside
-                            if (input.isEmpty||input.length>3||checkSpecial||int.parse(input)<18) return 'Enter Valid Age';
+                            if (input.isEmpty ||
+                                input.length > 3 ||
+                                checkSpecial ||
+                                int.parse(input) < 18) return 'Enter Valid Age';
                           },
                           decoration: InputDecoration(
                             labelText: 'Age',
@@ -181,15 +201,18 @@ class _SignUpState extends State<SignUp> {
                     Container(
                       child: TextFormField(
                           validator: (input) {
-                            bool checkSpecial=isSpecial(input);
-                            if(input.isEmpty||input.length!=12||checkSpecial) return 'Enter Valid Aadhar Number';
+                            bool checkSpecial = isSpecial(input);
+                            if (input.isEmpty ||
+                                input.length != 12 ||
+                                checkSpecial)
+                              return 'Enter Valid Aadhar Number';
                           },
                           decoration: InputDecoration(
                             labelText: 'Aadhar Number',
                             prefixIcon: Icon(FontAwesomeIcons.fingerprint),
                           ),
                           keyboardType: TextInputType.number,
-                          onSaved: (input) =>  _aadharNumber = input),
+                          onSaved: (input) => _aadharNumber = input),
                     ),
                     SizedBox(height: 20),
                     RaisedButton(
@@ -214,15 +237,14 @@ class _SignUpState extends State<SignUp> {
       ),
     ));
   }
+
   bool isSpecial(String s) {
-      for (int i = 0; i < s.length; i++) {
-        if (s[i] == ',' || s[i] == ' ' || s[i] == '.' || s[i] == '-')
-          return true;
-      }
+    for (int i = 0; i < s.length; i++) {
+      if (s[i] == ',' || s[i] == ' ' || s[i] == '.' || s[i] == '-') return true;
+    }
     return false;
   }
 }
-
 
 // validator: (val) =>
 // val.length < 6 ?

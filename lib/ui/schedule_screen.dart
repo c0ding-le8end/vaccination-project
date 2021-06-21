@@ -137,7 +137,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   }))
         ],
       ),
-      body: FutureBuilder(
+      body:  FutureBuilder(
         future: vlist,
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
@@ -171,8 +171,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: snapshot.data.sessions[index]
-                                                .availableCapacity ==
-                                            0
+                                        .availableCapacity ==
+                                        0
                                         ? Colors.black
                                         : Colors.green,
                                     fontSize: 16),
@@ -182,7 +182,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                                //height: 50,
+                              //height: 50,
                                 width: MediaQuery.of(context).size.width,
                                 child: Row(
                                   children: [
@@ -209,26 +209,30 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     ),
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => HospitalDetails(
-                              hospitalName: hospitalName,
-                              hospitalAddress: hospitalAddress,
-                              district: district,
-                              state: state,
-                              slots: slots,
-                              dose1: dose1,
-                              block: block,
-                              vaccine: vaccine,
-                            ))),
+                          hospitalName: hospitalName,
+                          hospitalAddress: hospitalAddress,
+                          district: district,
+                          state: state,
+                          slots: slots,
+                          dose1: dose1,
+                          block: block,
+                          vaccine: vaccine,
+                        ))),
                   ),
                 );
               },
             );
           } else
+          if(_pincode==""||_pincode.length!=6) {
             return Container(
                 child: Center(
-              child: Text("Enter Valid Pincode"),
-            ));
+                  child: Text("Enter Valid Pincode"),
+                ));
+          }
+          else
+            return Center(child: CircularProgressIndicator());
         },
-      ),
+      )
     );
   }
 

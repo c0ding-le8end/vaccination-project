@@ -13,6 +13,7 @@ import 'sign_up.dart';
 String userName;
 int statusIndex = 0;
 
+
 class Sample extends StatefulWidget {
   const Sample({Key key,}) : super(key: key);
 
@@ -154,11 +155,12 @@ class _SampleState extends State<Sample> {
   Container userCard(BuildContext context,
       AsyncSnapshot<DocumentSnapshot> snapshot) {
     Map<String, dynamic> documentFields = snapshot.data.data();
-    var name = documentFields['name'];
+    var name = documentFields['details']['name'];
     userName = name;
-    var phoneNumber = documentFields['phoneNumber'];
-    var age = documentFields['age'];
-    var aadharNumber = documentFields['aadharNumber'];
+    var phoneNumber = documentFields['details']['phoneNumber'];
+    var age = documentFields['details']['age'];
+    var aadharNumber = documentFields['details']['aadharNumber'];
+    var status= documentFields['Vaccine']['dose1']['status'];
     return Container(
       width: MediaQuery
           .of(context)
@@ -228,7 +230,7 @@ class _SampleState extends State<Sample> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text("Not Vaccinated", style: TextStyle(
+                            Text("${status}", style: TextStyle(
                               backgroundColor: Colors.amberAccent.shade200,
                               fontWeight: FontWeight.w600,
                               fontSize: 18,
@@ -246,10 +248,10 @@ class _SampleState extends State<Sample> {
                                   fontSize: 20,
                                   color: Colors.blue.shade900
                               ),),
-                              Icon(documentFields['gender'] == 'Male'
+                              Icon(documentFields['details']['gender'] == 'Male'
                                   ? FontAwesomeIcons.male
-                                  : FontAwesomeIcons.female,
-                                  color: documentFields['gender'] == 'Male'
+                                  :(documentFields['details']['gender']=='Other'?FontAwesomeIcons.transgender: FontAwesomeIcons.female),
+                                  color: documentFields['details']['gender'] == 'Male'
                                       ? Colors.blue.shade900
                                       :Colors.pinkAccent)
                             ],
@@ -318,13 +320,13 @@ class _SampleState extends State<Sample> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 160.0),
                                   child: RaisedButton(
-                                    onPressed: () =>
+                                    onPressed: status=='Not Vaccinated'?()
                                     {
                                       Navigator.push(context, MaterialPageRoute(
-                                          builder: (context) => Pincode()))
-                                    },
+                                          builder: (context) => Pincode()));
+                                    }:null,
                                     color: Colors.blue.shade900,
-                                    child: Text("Schedule", style: TextStyle(
+                                    child: Text(status=='Not Vaccinated'?"Schedule":"Scheduled", style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                         color: Colors.white
@@ -373,10 +375,10 @@ class _SampleState extends State<Sample> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 160.0),
                                   child: RaisedButton(
-                                    onPressed: () =>
+                                    onPressed: documentFields['Vaccine']['dose1']['status']=='Not Vaccinated'?null:()
                                     {
                                       Navigator.push(context, MaterialPageRoute(
-                                          builder: (context) => Pincode()))
+                                          builder: (context) => Pincode()));
                                     },
                                     color: Colors.blue.shade900,
                                     child: Text("Schedule", style: TextStyle(
