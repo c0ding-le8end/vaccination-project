@@ -14,6 +14,7 @@ class HospitalDetails extends StatefulWidget {
   final String vaccine;
   final List<String> slots;
   final int dose1;
+  final String vStatus;
 
   const HospitalDetails(
       {Key key,
@@ -24,12 +25,12 @@ class HospitalDetails extends StatefulWidget {
       this.slots,
       this.dose1,
       this.block,
-      this.vaccine})
+      this.vaccine,this.vStatus})
       : super(key: key);
 
   @override
   _HospitalDetailsState createState() => _HospitalDetailsState(hospitalName,
-      hospitalAddress, district, state, slots, dose1, block, vaccine);
+      hospitalAddress, district, state, slots, dose1, block, vaccine,vStatus);
 }
 
 class _HospitalDetailsState extends State<HospitalDetails> {
@@ -41,6 +42,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
   final String _vaccine;
   final List<String> _slots;
   final int _dose1;
+  final String _vStatus;
 
   _HospitalDetailsState(
       this._hospitalName,
@@ -50,7 +52,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
       this._slots,
       this._dose1,
       this._block,
-      this._vaccine);
+      this._vaccine,this._vStatus);
 
   @override
   Widget build(BuildContext context) {
@@ -189,35 +191,56 @@ class _HospitalDetailsState extends State<HospitalDetails> {
         .doc(userDetails.uid)
         .set({"name": userName, "hospitalName": _hospitalName});
   }
-}
 
-Widget ConfirmationScreen(BuildContext context) {
-  return AlertDialog(
-    title: Text("Confirm!"),
-    content: Container(
-      child: Text("Confirm Slot"),
-    ),
-    actions: [
-      FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Cancel')),
-      FlatButton(
-          onPressed: () async {
-            await FirebaseFirestore.instance
-                .collection("users")
-                .doc(userDetails.uid)
-                .update({
-              "Vaccine": {
-                "dose1": {"status": "Partially Vaccinated"},
-                'dose2': {"status": "Not Vaccinated"},
+  Widget ConfirmationScreen(BuildContext context) {
+    return AlertDialog(
+      title: Text("Confirm!"),
+      content: Container(
+        child: Text("Confirm Slot"),
+      ),
+      actions: [
+        FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel')),
+        FlatButton(
+            onPressed: () async {
+              var dose1Status,dose2Status;
+
+              print("$dose1Status");
+              if(_vStatus=='Not Vaccinated')
+                {debugPrint("$_dose1");
+                  await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(userDetails.uid)
+                      .update({
+                    "Vaccine": {
+                      "dose1": {"status": "Partially Vaccinated"},
+                      'dose2': {"status": "Under Vaccination"},
+                    }
+
+                });
+                      }
+              else
+                {
+                  debugPrint("$_dose1");
+                await FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(userDetails.uid)
+                    .update({
+                "Vaccine": {
+                "dose1": {"status": "Fully Vaccinated"},
+                'dose2': {"status": "Fully Vaccinated"},
+                }
+                });
+
               }
-            });
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => Sample()));
-          },
-          child: Text('Ok')),
-    ],
-  );
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => Sample()));
+            },
+            child: Text('Ok')),
+      ],
+    );
+  }
 }

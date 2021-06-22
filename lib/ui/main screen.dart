@@ -13,10 +13,10 @@ import 'sign_up.dart';
 String userName;
 int statusIndex = 0;
 
-
 class Sample extends StatefulWidget {
-  const Sample({Key key,}) : super(key: key);
-
+  const Sample({
+    Key key,
+  }) : super(key: key);
 
   @override
   _SampleState createState() => _SampleState();
@@ -49,13 +49,16 @@ class _SampleState extends State<Sample> {
         this.user = firebaseUser;
         userDetails = firebaseUser;
         this.isloggedin = true;
-        userStream = FirebaseFirestore.instance.collection("users")
+        userStream = FirebaseFirestore.instance
+            .collection("users")
             .doc(firebaseUser.uid)
             .snapshots();
         if (userStream == null) {
           setState(() {
-            userStream = FirebaseFirestore.instance.collection("users").doc(
-                firebaseUser.uid).snapshots();
+            userStream = FirebaseFirestore.instance
+                .collection("users")
+                .doc(firebaseUser.uid)
+                .snapshots();
           });
         }
       });
@@ -66,46 +69,44 @@ class _SampleState extends State<Sample> {
     _auth.signOut();
   }
 
-
   @override
   void initState() {
     // vList = VaccineData().getdata(pincode:_pincode);
     this.checkAuthentification();
     this.getUser();
 
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(
-      title: Text("Vaccine app"),
-      backgroundColor: Colors.blue.shade900,
-    ),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Vaccine app"),
+          backgroundColor: Colors.blue.shade900,
+        ),
         drawer: Drawer(
           child: ListView(
             children: <Widget>[
               Container(
                 height: 70,
-                child: DrawerHeader(decoration: BoxDecoration(
-                    color: Colors.blue.shade900
-                ),
+                child: DrawerHeader(
+                  decoration: BoxDecoration(color: Colors.blue.shade900),
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("Drawer Header", style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),),
+                    child: Text(
+                      "Drawer Header",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-
                 ),
               ),
               ListTile(
-                title: Text("Profile", style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white
-                )),
+                title: Text("Profile",
+                    style: TextStyle(fontSize: 16, color: Colors.white)),
                 onTap: () => debugPrint("Test1"),
                 tileColor: Colors.blue.shade900,
               ),
@@ -126,51 +127,42 @@ class _SampleState extends State<Sample> {
               //   tileColor: Colors.blue.shade900,
               // ),
               ListTile(
-                title: Text("Logout", style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white
-                )),
+                title: Text("Logout",
+                    style: TextStyle(fontSize: 16, color: Colors.white)),
                 onTap: signOut,
                 tileColor: Colors.blue.shade900,
               )
             ],
           ),
         ),
-        body:
-        StreamBuilder<DocumentSnapshot>(
+        body: StreamBuilder<DocumentSnapshot>(
             stream: userStream,
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data.data() != null)
                 return userCard(context, snapshot);
               else
                 return CircularProgressIndicator();
-            }
-        )
-      //Hospital_View(context,snapshot);
+            })
+        //Hospital_View(context,snapshot);
 
-
-    );
+        );
   }
 
-  Container userCard(BuildContext context,
-      AsyncSnapshot<DocumentSnapshot> snapshot) {
+  Container userCard(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
     Map<String, dynamic> documentFields = snapshot.data.data();
     var name = documentFields['details']['name'];
     userName = name;
     var phoneNumber = documentFields['details']['phoneNumber'];
     var age = documentFields['details']['age'];
     var aadharNumber = documentFields['details']['aadharNumber'];
-    var status= documentFields['Vaccine']['dose1']['status'];
+    var status = documentFields['Vaccine']['dose1']['status'];
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       height: 550,
       decoration: BoxDecoration(
-        //color: Colors.amberAccent,
-          borderRadius: BorderRadius.circular(7)
-      ),
+          //color: Colors.amberAccent,
+          borderRadius: BorderRadius.circular(7)),
       child: Card(
         //color: Colors.blue.shade100,
         child: Column(
@@ -180,14 +172,15 @@ class _SampleState extends State<Sample> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Flexible(child: Padding(
+                Flexible(
+                    child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Account Details",
+                  child: Text(
+                    "Account Details",
                     style: TextStyle(
                         fontSize: 23,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade900
-                    ),
+                        color: Colors.blue.shade900),
                   ),
                 ))
               ],
@@ -195,14 +188,15 @@ class _SampleState extends State<Sample> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Flexible(child: Padding(
+                Flexible(
+                    child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Registered Mobile Number: $phoneNumber",
+                  child: Text(
+                    "Registered Mobile Number: $phoneNumber",
                     style: TextStyle(
                         fontSize: 18,
                         //fontWeight: FontWeight.bold,
-                        color: Colors.black
-                    ),
+                        color: Colors.black),
                   ),
                 ))
               ],
@@ -211,15 +205,11 @@ class _SampleState extends State<Sample> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
+                width: MediaQuery.of(context).size.width,
                 height: 400,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(2),
-                    color: Colors.black
-                ),
+                    color: Colors.black),
                 child: Card(
                   //color: Colors.blue.shade100,
                   child: Padding(
@@ -230,11 +220,14 @@ class _SampleState extends State<Sample> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text("${status}", style: TextStyle(
-                              backgroundColor: Colors.amberAccent.shade200,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                            ),),
+                            Text(
+                              "${status}",
+                              style: TextStyle(
+                                backgroundColor: Colors.amberAccent.shade200,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                              ),
+                            ),
                           ],
                         ),
                         Padding(
@@ -243,17 +236,24 @@ class _SampleState extends State<Sample> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text("$name ", style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.blue.shade900
-                              ),),
-                              Icon(documentFields['details']['gender'] == 'Male'
-                                  ? FontAwesomeIcons.male
-                                  :(documentFields['details']['gender']=='Other'?FontAwesomeIcons.transgender: FontAwesomeIcons.female),
-                                  color: documentFields['details']['gender'] == 'Male'
+                              Text(
+                                "$name ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.blue.shade900),
+                              ),
+                              Icon(
+                                  documentFields['details']['gender'] == 'Male'
+                                      ? FontAwesomeIcons.male
+                                      : (documentFields['details']['gender'] ==
+                                              'Other'
+                                          ? FontAwesomeIcons.transgender
+                                          : FontAwesomeIcons.female),
+                                  color: documentFields['details']['gender'] ==
+                                          'Male'
                                       ? Colors.blue.shade900
-                                      :Colors.pinkAccent)
+                                      : Colors.pinkAccent)
                             ],
                           ),
                         ),
@@ -275,26 +275,28 @@ class _SampleState extends State<Sample> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Text("Age: $age ", style: TextStyle(
-                                  fontSize: 17
-                              ),)
+                              Text(
+                                "Age: $age ",
+                                style: TextStyle(fontSize: 17),
+                              )
                             ],
                           ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text("Aadhaar Card  ID Number:$aadharNumber",
-                              style: TextStyle(
-                                  fontSize: 17
-                              ),),
+                            Text(
+                              "Aadhaar Card  ID Number:$aadharNumber",
+                              style: TextStyle(fontSize: 17),
+                            ),
                           ],
                         ),
                         //Horizontal Line
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Container(
-                            height: 0.5, color: Colors.grey,
+                            height: 0.5,
+                            color: Colors.grey,
                           ),
                         ),
                         Padding(
@@ -310,35 +312,46 @@ class _SampleState extends State<Sample> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10.0),
-                                  child: Text("Dose 1", style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15
-                                  ),),
+                                  child: Text(
+                                    "Dose 1",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
                                 ),
                                 //Schedule Button-Navigates to Scheduling screen
                                 Padding(
                                   padding: const EdgeInsets.only(left: 160.0),
                                   child: RaisedButton(
-                                    onPressed: status=='Not Vaccinated'?()
-                                    {
-                                      Navigator.push(context, MaterialPageRoute(
-                                          builder: (context) => Pincode()));
-                                    }:null,
+                                    onPressed: status == 'Not Vaccinated'
+                                        ? () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Pincode(
+                                                          status: status,
+                                                        )));
+                                          }
+                                        : null,
                                     color: Colors.blue.shade900,
-                                    child: Text(status=='Not Vaccinated'?"Schedule":"Scheduled", style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.white
-                                    ),),
+                                    child: Text(
+                                      status == 'Not Vaccinated'
+                                          ? "Schedule"
+                                          : "Scheduled",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.white),
+                                    ),
                                     shape: ContinuousRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            18)),
+                                        borderRadius:
+                                            BorderRadius.circular(18)),
                                   ),
                                 ),
                               ],
-                            )
-                        ),
+                            )),
                         //Appointment Status
                         // Padding(
                         //   padding: const EdgeInsets.only(left:15),
@@ -365,35 +378,49 @@ class _SampleState extends State<Sample> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10.0),
-                                  child: Text("Dose 2", style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15
-                                  ),),
+                                  child: Text(
+                                    "Dose 2",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
                                 ),
                                 //Schedule Button-Navigates to Scheduling screen
                                 Padding(
                                   padding: const EdgeInsets.only(left: 160.0),
                                   child: RaisedButton(
-                                    onPressed: documentFields['Vaccine']['dose1']['status']=='Not Vaccinated'?null:()
-                                    {
-                                      Navigator.push(context, MaterialPageRoute(
-                                          builder: (context) => Pincode()));
-                                    },
+                                    onPressed: documentFields['Vaccine']
+                                                    ['dose2']['status'] ==
+                                                'Not Vaccinated' ||
+                                            documentFields['Vaccine']['dose2']
+                                                    ['status'] ==
+                                                'Fully Vaccinated'
+                                        ? null
+                                        : () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Pincode()));
+                                          },
                                     color: Colors.blue.shade900,
-                                    child: Text("Schedule", style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.white
-                                    ),),
+                                    child: Text(documentFields['Vaccine']
+                                    ['dose2']['status'] ==
+                                        'Fully Vaccinated'?"Scheduled":
+                                      "Schedule",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.white),
+                                    ),
                                     shape: ContinuousRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            18)),
+                                        borderRadius:
+                                            BorderRadius.circular(18)),
                                   ),
                                 ),
                               ],
-                            )
-                        ),
+                            )),
                       ],
                     ),
                   ),
@@ -407,10 +434,8 @@ class _SampleState extends State<Sample> {
   }
 }
 
-
 // onPressed: () => {
 // Navigator.push(context, MaterialPageRoute(builder: (context)=>Pincode()))
-
 
 // Widget Hospital_View(context,snapshot)
 // {
