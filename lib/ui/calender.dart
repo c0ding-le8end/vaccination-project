@@ -1,0 +1,124 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'package:http/http.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:vaccination_portal/random.dart';
+import 'package:vaccination_portal/ui/schedule_screen.dart';
+
+String chosenDate;
+
+class Calender extends StatefulWidget {
+  final String vaccineType;
+  const Calender({Key key, this.vaccineType}) : super(key: key);
+
+  @override
+  _CalenderState createState() => _CalenderState(vaccineType);
+}
+
+class _CalenderState extends State<Calender> {
+  final String _vaccineType;
+
+  _CalenderState(this._vaccineType);
+
+  @override
+  Widget build(BuildContext context) {
+    return  AlertDialog(
+      title: Text("Choose Date"),
+      content: Container(
+        child: RadioListBuilder(
+        ),
+        width: 150,
+        height: 150,
+      ),
+      actions: <Widget>[
+        FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel')),
+        FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) =>ScheduleScreen(pincode:selectedPincode,currentDate: chosenDate,vaccineType: _vaccineType,)));
+            },
+            child: Text('OK'))
+        ,
+      ],
+    );
+  }
+}
+
+class RadioListBuilder extends StatefulWidget {
+  const RadioListBuilder({Key key}) : super(key: key);
+
+  @override
+  _RadioListBuilderState createState() => _RadioListBuilderState();
+}
+
+class _RadioListBuilderState extends State<RadioListBuilder> {
+  int id=0;
+  String init_date = Date_Get.getCurrentDate();
+  List<DateObject> week = [
+    DateObject(
+      index: 0,
+      date: Date_Get.getCurrentDate()
+    ),
+    DateObject(
+        index: 1,
+        date: Date_Get.getNewDate(1)
+    ),
+    DateObject(
+        index: 2,
+        date: Date_Get.getNewDate(2)
+    ),
+    DateObject(
+        index: 3,
+        date: Date_Get.getNewDate(3)
+    ),
+    DateObject(
+        index: 4,
+        date: Date_Get.getNewDate(4)
+    ),
+    DateObject(
+        index: 5,
+        date: Date_Get.getNewDate(5)
+    ),
+    DateObject(
+        index: 6,
+        date: Date_Get.getNewDate(6)
+    )
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [Container(
+        child:Column(
+          children:
+            week.map((data) => RadioListTile(
+                title: Text(("${data.date}")),
+                value: data.index, groupValue: id, onChanged: (val)
+            {
+              setState(() {
+                init_date=data.date;
+                id=data.index;
+              }
+              );
+              chosenDate=init_date;
+            })).toList(),
+        )
+
+      ),]
+    );}
+}
+
+
+class DateObject
+{
+  int index;
+
+  DateObject({this.index, this.date});
+
+  var date;
+}
