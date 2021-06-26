@@ -105,12 +105,13 @@ class ScheduleScreen extends StatefulWidget {
   final String currentDate;
   final String vStatus;
   final String vaccineType;
-  const ScheduleScreen({this.vStatus, Key key, this.pincode, this.currentDate, this.vaccineType})
+  final int todayDate;
+  const ScheduleScreen({this.vStatus, Key key, this.pincode, this.currentDate, this.vaccineType, this.todayDate})
       : super(key: key);
 
   @override
   _ScheduleScreenState createState() =>
-      _ScheduleScreenState(pincode, currentDate,vStatus,vaccineType);
+      _ScheduleScreenState(pincode, currentDate,vStatus,vaccineType,todayDate);
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
@@ -119,9 +120,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   final String _currentDate;
   final String vStatus;
   final String _vaccineType;
+  final int _todayDate;
   Stream<DocumentSnapshot> _doseDoc;
 
-  _ScheduleScreenState(this._pincode, this._currentDate, this.vStatus, this._vaccineType);
+  _ScheduleScreenState(this._pincode, this._currentDate, this.vStatus, this._vaccineType, this._todayDate);
 
   @override
   // TODO: implement widget
@@ -152,7 +154,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 onPressed: () => showDialog(
                     context: context,
                     builder: (context) {
-                      return Calender(vaccineType:_vaccineType);
+                      return Calender(vaccineType:_vaccineType,todayDate:_todayDate);
                     }))
           ],
         ),

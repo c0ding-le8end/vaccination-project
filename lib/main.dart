@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vaccination_portal/ui/TestDB.dart';
 import 'package:vaccination_portal/ui/loading_screen.dart';
+import 'package:vaccination_portal/ui/logotest.dart';
 import 'package:vaccination_portal/ui/main%20screen.dart';
 
 import 'package:vaccination_portal/ui/schedule_screen.dart';

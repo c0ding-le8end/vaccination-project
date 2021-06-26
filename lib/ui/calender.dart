@@ -11,24 +11,24 @@ String chosenDate;
 
 class Calender extends StatefulWidget {
   final String vaccineType;
-  const Calender({Key key, this.vaccineType}) : super(key: key);
+  final int todayDate;
+  const Calender({Key key, this.vaccineType, this.todayDate}) : super(key: key);
 
   @override
-  _CalenderState createState() => _CalenderState(vaccineType);
+  _CalenderState createState() => _CalenderState(vaccineType,todayDate);
 }
 
 class _CalenderState extends State<Calender> {
   final String _vaccineType;
-
-  _CalenderState(this._vaccineType);
+  final int _todayDate;
+  _CalenderState(this._vaccineType, this._todayDate);
 
   @override
   Widget build(BuildContext context) {
     return  AlertDialog(
       title: Text("Choose Date"),
       content: Container(
-        child: RadioListBuilder(
-        ),
+        child: RadioListBuilder(todayDate:_todayDate),
         width: 150,
         height: 150,
       ),
@@ -51,15 +51,25 @@ class _CalenderState extends State<Calender> {
 }
 
 class RadioListBuilder extends StatefulWidget {
-  const RadioListBuilder({Key key}) : super(key: key);
+  final int todayDate;
+  const RadioListBuilder({Key key, this.todayDate}) : super(key: key);
 
   @override
-  _RadioListBuilderState createState() => _RadioListBuilderState();
+  _RadioListBuilderState createState() => _RadioListBuilderState(todayDate);
 }
 
 class _RadioListBuilderState extends State<RadioListBuilder> {
+  final int _todayDate;
+  _RadioListBuilderState(this._todayDate);
+
   int id=0;
-  String init_date = Date_Get.getCurrentDate();
+  String init_date;//Date_Get.getCurrentDate();
+  @override
+  void initState() {
+    super.initState();
+    init_date=Date_Get.getCurrentDate();
+    id=_todayDate;
+  }
   List<DateObject> week = [
     DateObject(
       index: 0,
