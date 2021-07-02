@@ -40,9 +40,13 @@ class _PincodeState extends State<Pincode> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Book Appointment for Dose-1"),
-
-      ),
+        title: Text("Book Appointment",style: TextStyle(
+            fontFamily: 'WorkSans',
+            fontWeight: FontWeight.w900,
+            fontSize: 24,
+            fontStyle: FontStyle.normal,
+            letterSpacing: 1)),
+      centerTitle: false,),
       body: FutureBuilder(
         future: vList,
         builder: (context, AsyncSnapshot snapshot) {
@@ -146,7 +150,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     int j=0;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Book Appointment "),
+          title: Text("Vaccination Centres",style: TextStyle(
+          fontFamily: 'WorkSans',
+              fontWeight: FontWeight.w900,
+              fontSize: 22,
+              fontStyle: FontStyle.normal,
+              letterSpacing: 1)),
+      centerTitle: false,
 
           actions: [
             IconButton(

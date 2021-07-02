@@ -83,8 +83,14 @@ class _SampleState extends State<Sample> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Vaccine app"),
-
+          title: Text("ProVax",
+              style: TextStyle(
+                  fontFamily: 'WorkSans',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 27,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: 3)),
+          centerTitle: true,
         ),
         drawer: Drawer(
           child: ListView(
@@ -93,7 +99,6 @@ class _SampleState extends State<Sample> {
                 height: 70,
                 child: DrawerHeader(
                   decoration: BoxDecoration(color: Color(0xFF344955)),
-
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
@@ -107,10 +112,8 @@ class _SampleState extends State<Sample> {
                 ),
               ),
               ListTile(
-                title: Text("Profile",
-                    style: TextStyle(fontSize: 16, color: Colors.red)),
+                title: Text("Profile", style: TextStyle(fontSize: 16)),
                 onTap: () => debugPrint("Test1"),
-
               ),
               // ListTile(
               //   title: Text("Vaccine Info",style: TextStyle(
@@ -130,9 +133,10 @@ class _SampleState extends State<Sample> {
               // ),
               ListTile(
                 title: Text("Logout",
-                    style: TextStyle(fontSize: 16, color: Colors.white)),
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
                 onTap: signOut,
-
               )
             ],
           ),
@@ -143,7 +147,7 @@ class _SampleState extends State<Sample> {
               if (snapshot.hasData && snapshot.data.data() != null)
                 return userCard(context, snapshot);
               else
-                return CircularProgressIndicator();
+                return Center(child: CircularProgressIndicator());
             })
         //Hospital_View(context,snapshot);
 
@@ -178,13 +182,11 @@ class _SampleState extends State<Sample> {
                 Flexible(
                     child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Account Details",
-                    style: TextStyle(
+                  child: Text("Account Details",
+                      style: TextStyle(
                         fontSize: 23,
                         fontWeight: FontWeight.bold,
-                    )
-                  ),
+                      )),
                 ))
               ],
             ),
@@ -197,8 +199,8 @@ class _SampleState extends State<Sample> {
                   child: Text(
                     "Registered Mobile Number: $phoneNumber",
                     style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ))
@@ -227,7 +229,7 @@ class _SampleState extends State<Sample> {
                               "${status}",
                               style: TextStyle(
                                 backgroundColor: Colors.amberAccent.shade200,
-                             //   fontWeight: FontWeight.w600,
+                                //   fontWeight: FontWeight.w600,
                                 fontSize: 18,
                               ),
                             ),
@@ -239,13 +241,11 @@ class _SampleState extends State<Sample> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(
-                                "$name ",
-                                style: TextStyle(
+                              Text("$name ",
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
-                                )
-                              ),
+                                  )),
                               Icon(
                                   documentFields['details']['gender'] == 'Male'
                                       ? FontAwesomeIcons.male
@@ -338,17 +338,15 @@ class _SampleState extends State<Sample> {
                                                         )));
                                           }
                                         : null,
-
                                     child: Text(
-                                      status == 'Not Vaccinated'
-                                          ? "Schedule"
-                                          : "Scheduled",
-                                      style: TextStyle(
+                                        status == 'Not Vaccinated'
+                                            ? "Schedule"
+                                            : "Scheduled",
+                                        style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
-                                        //  color: Colors.white),
-                                      )
-                                    ),
+                                          //  color: Colors.white),
+                                        )),
                                     shape: ContinuousRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(18)),
@@ -406,19 +404,22 @@ class _SampleState extends State<Sample> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        Pincode(vaccineType: vaccineType,)));
+                                                        Pincode(
+                                                          vaccineType:
+                                                              vaccineType,
+                                                        )));
                                           },
-
-                                    child: Text(documentFields['Vaccine']
-                                    ['dose2']['status'] ==
-                                        'Fully Vaccinated'?"Scheduled":
-                                      "Schedule",
-                                      style: TextStyle(
+                                    child: Text(
+                                        documentFields['Vaccine']['dose2']
+                                                    ['status'] ==
+                                                'Fully Vaccinated'
+                                            ? "Scheduled"
+                                            : "Schedule",
+                                        style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
-                                      //    color: Colors.white),
-                                      )
-                                    ),
+                                          //    color: Colors.white),
+                                        )),
                                     shape: ContinuousRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(18)),

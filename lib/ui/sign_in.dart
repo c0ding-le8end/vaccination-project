@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vaccination_portal/ui/main%20screen.dart';
 import 'package:vaccination_portal/ui/sign_up.dart';
+
+import '../main.dart';
 //import 'SignUp.dart';
 
 class Login extends StatefulWidget {
@@ -96,28 +98,34 @@ class _LoginState extends State<Login> {
                       key: _formKey,
                       child: Column(
                         children: <Widget>[
-                          Container(
-                            child: TextFormField(
-                                validator: (input) {
-                                  if (input.isEmpty) return 'Enter Email';
-                                },
-                                decoration: InputDecoration(
-                                    labelText: 'Email',
-                                    prefixIcon: Icon(Icons.email)),
-                                onSaved: (input) => _email = input),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal:18.0),
+                            child: Container(
+                              child: TextFormField(
+                                  validator: (input) {
+                                     if (input.isEmpty) return 'Enter Email';
+                                  },
+                                  decoration: InputDecoration(
+                                      labelText: 'Email',
+                                      prefixIcon: Icon(Icons.email)),
+                                  onSaved: (input) => _email = input),
+                            ),
                           ),
-                          Container(
-                            child: TextFormField(
-                                validator: (input) {
-                                  if (input.length < 6)
-                                    return 'Provide Minimum 6 Character';
-                                },
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  prefixIcon: Icon(Icons.lock),
-                                ),
-                                obscureText: true,
-                                onSaved: (input) => _password = input),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal:18.0),
+                            child: Container(
+                              child: TextFormField(
+                                  validator: (input) {
+                                    if (input.length < 6)
+                                      return 'Provide Minimum 6 Character';
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    prefixIcon: Icon(Icons.lock),
+                                  ),
+                                  obscureText: true,
+                                  onSaved: (input) => _password = input),
+                            ),
                           ),
                           SizedBox(height: 20),
                           RaisedButton(
@@ -125,22 +133,32 @@ class _LoginState extends State<Login> {
                             onPressed: login,
                             child: Text('LOGIN',
                                 style: TextStyle(
-                                    color: Colors.white,
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold)),
 
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                GestureDetector(
-                  child: Text('Create an Account?'),
-                  onTap: navigateToSignUp,
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top:18.0),
+                      child: Text('Don\'t have an account ?',style: TextStyle(fontSize: 15,color: lightGrey)),
+                  ),
+                ),
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top:5.0),
+                    child: GestureDetector(
+                      child: Text('Sign Up',style: TextStyle(fontSize: 15,color: lightGrey)),
+                      onTap: navigateToSignUp,
+                    ),
+                  ),
                 )
               ],
             ),

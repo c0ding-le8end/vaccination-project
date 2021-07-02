@@ -26,9 +26,15 @@ class _VaccineTypeState extends State<VaccineType> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Vaccine Type"),
+          title: Text("Vaccine Type",style: TextStyle(
+              fontFamily: 'WorkSans',
+              fontWeight: FontWeight.w900,
+              fontSize: 24,
+              fontStyle: FontStyle.normal,
+              letterSpacing: 2)),
+          centerTitle: false,),
+
          // backgroundColor: Colors.blue.shade900,
-        ),
         body: Container(
             child: Padding(
                 padding: const EdgeInsets.all(38.0),

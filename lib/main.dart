@@ -13,7 +13,7 @@ import 'package:vaccination_portal/ui/sign_up.dart';
 
 
 
-
+Color lightGrey=Color(0xFF344955);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -65,9 +65,9 @@ class MyApp extends StatelessWidget {
   TextTheme getTextTheme(TextTheme base)
   {
     return base.copyWith(
-       // headline: base.headline1.copyWith(fontWeight: FontWeight.bold,color: Colors.blue),
+       title: base.title.copyWith(color: Colors.blue),
       //  subtitle: base.subtitle1.copyWith(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.red),
-       body1: base.body1.copyWith(fontWeight: FontWeight.bold,color: Color(0xFF232F34),fontFamily:"Lobster"),
+       body1: base.body1.copyWith(fontWeight: FontWeight.bold,color: Color(0xFF232F34),fontFamily:"WorkSans",),
       // body2: base.body2.copyWith(fontWeight: FontWeight.bold,color: Colors.pink,fontFamily:"Lobster"),
         button: base.button.copyWith(letterSpacing: 1,color: Color(0xFF232F34))
     );}
