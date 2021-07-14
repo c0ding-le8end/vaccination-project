@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vaccination_portal/ui/TestDB.dart';
 import 'package:vaccination_portal/ui/loading_screen.dart';
+
 import 'package:vaccination_portal/ui/main%20screen.dart';
 
 import 'package:vaccination_portal/ui/schedule_screen.dart';
@@ -12,7 +14,8 @@ import 'package:vaccination_portal/ui/sign_up.dart';
 
 
 
-
+Color lightGrey=Color(0xFF344955);
+Color yellow1=Color(0xFFF9AA33);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -25,8 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
 
-      theme: ThemeData(
-          primaryColor: Colors.orange
+      theme: appTheme(
       ),
       debugShowCheckedModeBanner: false,
       home:
@@ -36,14 +38,49 @@ class MyApp extends StatelessWidget {
       routes: <String,WidgetBuilder>{
 
         "Login" : (BuildContext context)=>Login(),
-         "SignUp":(BuildContext context)=>SignUp(),
-        // "start":(BuildContext context)=>Start(),
+        "SignUp":(BuildContext context)=>SignUp(),
+        "MainScreen":(BuildContext context)=>Sample(),
       },
 
     );
   }
 
+  ThemeData appTheme() {
+    //  return   ThemeData(
+    //
+    //scaffoldBackgroundColor: Color(0xFF344955),
+    final ThemeData base = ThemeData.light();
+    return base.copyWith(//brightness: Brightness.light,
+        scaffoldBackgroundColor: Color(0xFFF3F3F3),
+        //  backgroundColor: Color(0xFFF344955),
+        primaryColor: Color(0xFF344955),
+        iconTheme: IconThemeData(color: Colors.green,),
+        buttonTheme: ButtonThemeData(buttonColor: Color(0xFFF9AA33),shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),), //Color(0xFF344955)  //F9AA33
+        textTheme:getTextTheme(base.textTheme)
+// buttontext 232F34
+
+    );
+
+
+
+
+  }
+  TextTheme getTextTheme(TextTheme base)
+  {
+    return base.copyWith(
+
+        title: base.title.copyWith(color: Colors.blue),
+        subtitle: base.subtitle1.copyWith(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.green),
+        body1: base.body1.copyWith(fontWeight: FontWeight.bold,color: Color(0xFF232F34),fontFamily:"WorkSans",),
+        // body2: base.body2.copyWith(fontWeight: FontWeight.bold,color: Colors.pink,fontFamily:"Lobster"),
+        button: base.button.copyWith(letterSpacing: 1,color: Color(0xFF232F34),fontFamily: "WorkSans",fontWeight: FontWeight.bold)
+    );}
+
 }
+
+
 
 
 

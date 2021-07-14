@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vaccination_portal/main.dart';
 import 'package:vaccination_portal/ui/main%20screen.dart';
+import 'package:vaccination_portal/ui/verify_email.dart';
 
 User userDetails;
 
@@ -20,7 +23,9 @@ class _SignUpState extends State<SignUp> {
   checkAuthentication() async {
     _auth.authStateChanges().listen((user) async {
       if (user != null) {
-        Navigator.pushReplacementNamed(context, "/");
+
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>
+VerifyScreen()));
       }
     });
   }
@@ -60,8 +65,8 @@ class _SignUpState extends State<SignUp> {
 
                 "dose1": {"status": "Not Vaccinated", "name": _name},
 
-                "dose2": {"status": "Not Vaccinated", "name": _name}
-
+                "dose2": {"status": "Not Vaccinated", "name": _name},
+                "vaccineType":"Not Selected"
             }
           });
           // await Navigator.pushReplacementNamed(context,"/") ;
@@ -94,148 +99,278 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      child: TextFormField(
-                          validator: (input) {
-                            if (input.isEmpty) return 'Enter Name';
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Name',
-                            prefixIcon: Icon(Icons.person),
+    return WillPopScope(
+      onWillPop: () async
+      {
+        await Navigator.pushReplacementNamed(context,"Login") ;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Sign Up",
+              style: TextStyle(
+                  fontFamily: 'WorkSans',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 27,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: 3)),
+          centerTitle: true,
+        ),
+          body: Padding(
+            padding: const EdgeInsets.only(top: 20.0, left: 30, right: 30),
+            child: SingleChildScrollView(
+        child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: yellow1,width: 3),
+                              borderRadius: BorderRadius.circular(20),//color: yellow1
+
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: TextFormField(
+                                cursorColor: yellow1,
+                                  validator: (input) {
+                                    if (input.isEmpty) return 'Enter Name';
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    labelText: 'Name',
+                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+
+
+                                    prefixIcon: Icon(Icons.person,color: lightGrey,
+                                    ),
+                                  ),
+                                  onSaved: (input) => _name = input),
+                            ),
                           ),
-                          onSaved: (input) => _name = input),
-                    ),
-                    Container(
-                      child: TextFormField(
-                          validator: (input) {
-                            if (input.isEmpty) return 'Enter Email';
-                          },
-                          decoration: InputDecoration(
-                              labelText: 'Email',
-                              prefixIcon: Icon(Icons.email)),
-                          onSaved: (input) => _email = input),
-                    ),
-                    Container(
-                      child: TextFormField(
-                          validator: (input) {
-                            if (input.length < 6)
-                              return 'Provide Minimum 6 Character';
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            prefixIcon: Icon(Icons.lock),
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: yellow1, width:3),
+                              borderRadius: BorderRadius.circular(20),),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: TextFormField(
+                                  cursorColor: yellow1,
+                                  validator: (input) {
+                                    if (input.isEmpty) return 'Enter Email';
+                                  },
+                                  decoration: InputDecoration(
+                                      labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                                      border: InputBorder.none,
+                                      labelText: 'Email',
+                                      prefixIcon: Icon(Icons.email,color: lightGrey)),
+                                  onSaved: (input) => _email = input),
+                            ),
                           ),
-                          obscureText: true,
-                          onSaved: (input) => _password = input),
-                    ),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: DropdownButtonFormField<String>(
-                          validator: (input) {
-                            if (input == null) return 'Enter Gender';
-                          },
-                          decoration: InputDecoration(
-                              labelText: "Gender",
-                              prefixIcon: Icon(FontAwesomeIcons.male)),
-                          value: _gender,
-                          icon: const Icon(Icons.arrow_drop_down),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.deepPurple),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              _gender = newValue;
-                            });
-                          },
-                          items: <String>['Male', 'Female', 'Other']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        )),
-                    Container(
-                      child: TextFormField(
-                          validator: (input) {
-                            bool checkSpecial = isSpecial(input);
-                            if (input.isEmpty ||
-                                input.length != 10 ||
-                                checkSpecial) return 'Enter Valid Phone Number';
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Phone Number',
-                            prefixIcon: Icon(FontAwesomeIcons.phoneAlt),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: yellow1,width: 3),
+                              borderRadius: BorderRadius.circular(20),//color: yellow1
+                            ),
+
+                              child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: TextFormField(
+                                  cursorColor: yellow1,
+                                  validator: (input) {
+                                    if (input.length < 6)
+                                      return 'Provide Minimum 6 Character';
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    labelText: 'Password',
+                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                                    prefixIcon: Icon(Icons.lock,color: lightGrey),
+                                  ),
+                                  obscureText: true,
+                                  onSaved: (input) => _password = input),
+                            ),
                           ),
-                          keyboardType: TextInputType.number,
-                          onSaved: (input) => _phoneNumber = input),
-                    ),
-                    Container(
-                      child: TextFormField(
-                          validator: (input) {
-                            bool checkSpecial = isSpecial(input);
-                            //Parse INT works only inside IF not outside
-                            if (input.isEmpty ||
-                                input.length > 3 ||
-                                checkSpecial ||
-                                int.parse(input) < 18) return 'Enter Valid Age';
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Age',
-                            prefixIcon: Icon(FontAwesomeIcons.phoneAlt),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: yellow1,width: 3),
+                                borderRadius: BorderRadius.circular(20),//color: yellow1
+                            ),
+                                width: MediaQuery.of(context).size.width,
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: DropdownButtonFormField<String>(
+
+                                  validator: (input) {
+                                    if (input == null) return 'Enter Gender';
+                                  },
+                                  decoration: InputDecoration(
+                                      labelText: "Gender",
+                                      border: InputBorder.none,
+                                      labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+
+                                      prefixIcon: Icon(FontAwesomeIcons.male,color: lightGrey)),
+                                  value: _gender,
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: const TextStyle(color: Color(0xFF344955)),
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      _gender = newValue;
+                                    });
+                                  },
+                                  items: <String>['Male', 'Female', 'Other']
+                                      .map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: yellow1,width: 3),
+                              borderRadius: BorderRadius.circular(20),//color: yellow1
+                            ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: TextFormField(
+                                  maxLength: 10,
+                                    cursorColor: yellow1,
+                                  validator: (input) {
+                                    bool checkSpecial = isSpecial(input);
+                                    if (input.isEmpty ||
+                                        input.length != 10 ||
+                                        checkSpecial) return 'Enter Valid Phone Number';
+                                  },
+                                  decoration: InputDecoration(
+                                    counterText: "",
+                                    border: InputBorder.none,
+                                    labelText: 'Phone Number',
+                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+
+                                    prefixIcon: Icon(FontAwesomeIcons.phoneAlt,color: lightGrey),
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  onSaved: (input) => _phoneNumber = input),
+                              ),
                           ),
-                          keyboardType: TextInputType.number,
-                          onSaved: (input) => _age = input),
-                    ),
-                    Container(
-                      child: TextFormField(
-                          validator: (input) {
-                            bool checkSpecial = isSpecial(input);
-                            if (input.isEmpty ||
-                                input.length != 12 ||
-                                checkSpecial)
-                              return 'Enter Valid Aadhar Number';
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Aadhar Number',
-                            prefixIcon: Icon(FontAwesomeIcons.fingerprint),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: yellow1,width: 3),
+                              borderRadius: BorderRadius.circular(20),//color: yellow1
+
+                            ),
+
+                            child: Padding(
+                              padding: const EdgeInsets.all(3),
+                              child: TextFormField(
+                                  maxLength: 3,
+                                  cursorColor: yellow1,
+                                  validator: (input) {
+                                    bool checkSpecial = isSpecial(input);
+                                    //Parse INT works only inside IF not outside
+                                    if (input.isEmpty ||
+                                        input.length > 3 ||
+                                        checkSpecial ||
+                                        int.parse(input) < 18) return 'Enter Valid Age';
+                                  },
+                                  decoration: InputDecoration(
+                                    counterText: "",
+                                    border: InputBorder.none,
+                                    labelText: 'Age',
+                                    prefixIcon: Icon(Icons.people,color: lightGrey,),
+                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  onSaved: (input) => _age = input),
+                            ),
                           ),
-                          keyboardType: TextInputType.number,
-                          onSaved: (input) => _aadharNumber = input),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: yellow1,width: 3),
+                              borderRadius: BorderRadius.circular(20),//color: yellow1
+
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: TextFormField(
+                                maxLength: 12,
+                                  cursorColor: yellow1,
+                                  validator: (input) {
+                                    bool checkSpecial = isSpecial(input);
+                                    if (input.isEmpty ||
+                                        input.length != 12 ||
+                                        checkSpecial)
+                                      return 'Enter Valid Aadhar Number';
+                                  },
+                                  decoration: InputDecoration(
+                                    counterText: "",
+                                    border: InputBorder.none,
+                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+
+                                    labelText: 'Aadhar Number',
+                                    prefixIcon: Icon(FontAwesomeIcons.fingerprint,color: lightGrey),
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  onSaved: (input) => _aadharNumber = input),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        RaisedButton(
+                          padding: EdgeInsets.fromLTRB(70, 15, 70, 15),
+                          onPressed: signUp,
+                          child: Text('Sign Up',
+                              style: TextStyle(
+                                  //  color: lightGrey,
+                                  fontFamily: "WorkSans",
+                                  letterSpacing: 1,
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.bold)),
+                          color: yellow1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        )
+                      ],
                     ),
-                    SizedBox(height: 20),
-                    RaisedButton(
-                      padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                      onPressed: signUp,
-                      child: Text('SignUp',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold)),
-                      color: Colors.orange,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
         ),
       ),
-    ));
+          )),
+    );
   }
 
   bool isSpecial(String s) {

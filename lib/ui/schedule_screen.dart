@@ -11,11 +11,11 @@ import '../random.dart';
 
 class Pincode extends StatefulWidget {
   final String status;
-
-  const Pincode({this.status, Key key}) : super(key: key);
+  final String vaccineType;
+  const Pincode({this.status, Key key, this.vaccineType}) : super(key: key);
 
   @override
-  _PincodeState createState() => _PincodeState(status);
+  _PincodeState createState() => _PincodeState(status,vaccineType);
 }
 
 class _PincodeState extends State<Pincode> {
@@ -23,8 +23,8 @@ class _PincodeState extends State<Pincode> {
   Future vList;
   var date;
   final String vStatus;
-
-  _PincodeState(this.vStatus);
+  final String _vaccineType;
+  _PincodeState(this.vStatus, this._vaccineType);
 
   @override
   void initState() {
@@ -40,9 +40,13 @@ class _PincodeState extends State<Pincode> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Book Appointment for Dose-1"),
-        backgroundColor: Colors.blue.shade900,
-      ),
+        title: Text("Book Appointment",style: TextStyle(
+            fontFamily: 'WorkSans',
+            fontWeight: FontWeight.w900,
+            fontSize: 24,
+            fontStyle: FontStyle.normal,
+            letterSpacing: 1)),
+      centerTitle: false,),
       body: FutureBuilder(
         future: vList,
         builder: (context, AsyncSnapshot snapshot) {
@@ -60,7 +64,7 @@ class _PincodeState extends State<Pincode> {
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade900),
+                        ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -80,6 +84,7 @@ class _PincodeState extends State<Pincode> {
                                   builder: (context) => ScheduleScreen(
                                         pincode: _pincode,
                                         vStatus: vStatus,
+                                        vaccineType:_vaccineType
                                       )));
                         });
                       },
@@ -103,13 +108,14 @@ class ScheduleScreen extends StatefulWidget {
   final String pincode;
   final String currentDate;
   final String vStatus;
-
-  const ScheduleScreen({this.vStatus, Key key, this.pincode, this.currentDate})
+  final String vaccineType;
+  final int todayDate;
+  const ScheduleScreen({this.vStatus, Key key, this.pincode, this.currentDate, this.vaccineType, this.todayDate})
       : super(key: key);
 
   @override
   _ScheduleScreenState createState() =>
-      _ScheduleScreenState(pincode, currentDate,vStatus);
+      _ScheduleScreenState(pincode, currentDate,vStatus,vaccineType,todayDate);
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
@@ -117,9 +123,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   final String _pincode;
   final String _currentDate;
   final String vStatus;
+  final String _vaccineType;
+  final int _todayDate;
   Stream<DocumentSnapshot> _doseDoc;
 
-  _ScheduleScreenState(this._pincode, this._currentDate, this.vStatus);
+  _ScheduleScreenState(this._pincode, this._currentDate, this.vStatus, this._vaccineType, this._todayDate);
 
   @override
   // TODO: implement widget
@@ -138,17 +146,25 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int i=0;
+    int j=0;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Book Appointment "),
-          backgroundColor: Colors.blue.shade900,
+          title: Text("Vaccination Centres",style: TextStyle(
+          fontFamily: 'WorkSans',
+              fontWeight: FontWeight.w900,
+              fontSize: 22,
+              fontStyle: FontStyle.normal,
+              letterSpacing: 1)),
+      centerTitle: false,
+
           actions: [
             IconButton(
                 icon: Icon(FontAwesomeIcons.calendar),
                 onPressed: () => showDialog(
                     context: context,
                     builder: (context) {
-                      return Calender();
+                      return Calender(vaccineType:_vaccineType,todayDate:_todayDate);
                     }))
           ],
         ),
@@ -176,8 +192,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   int dose = vStatus == 'Not Vaccinated'
                       ? snapshot.data.sessions[index].availableCapacityDose1
                       : snapshot.data.sessions[index].availableCapacityDose2;
-
-                  if (dose != 0) {
+                  String vType=snapshot.data.sessions[index].vaccine;
+                  debugPrint("${vType=="COVISHIELD"?i++:"Covaxin:${j++}"}");
+                  if (dose != 0&&vType==_vaccineType) {
                     return Container(
                       width: MediaQuery.of(context).size.width,
                       //color: Colors.blue,
@@ -242,7 +259,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                       dose1: dose,
                                       block: block,
                                       vaccine: vaccine,
-                                  vStatus:vStatus
+                                  vStatus:vStatus,
+                                  vType: _vaccineType,
                                     ))),
                       ),
                     );

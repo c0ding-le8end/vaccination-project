@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:vaccination_portal/ui/forget_password.dart';
 import 'package:vaccination_portal/ui/main%20screen.dart';
 import 'package:vaccination_portal/ui/sign_up.dart';
+
+import '../main.dart';
 //import 'SignUp.dart';
 
 class Login extends StatefulWidget {
@@ -12,7 +15,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  var authenticator;
   String _email, _password;
 
   checkAuthentification() async {
@@ -38,7 +41,6 @@ class _LoginState extends State<Login> {
       try {
         await _auth.signInWithEmailAndPassword(
             email: _email, password: _password);
-
       } catch (e) {
         showError(e.message);
         print(e);
@@ -65,22 +67,37 @@ class _LoginState extends State<Login> {
   }
 
   navigateToSignUp() async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => SignUp()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 100.0),
+              child: Container(
+                child: Image.asset(
+                  "images/Logo.png",
+                  width: 250,
+                  height: 200,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 50.0),
+              child: Container(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        child: Container(
                           child: TextFormField(
                               validator: (input) {
                                 if (input.isEmpty) return 'Enter Email';
@@ -90,7 +107,10 @@ class _LoginState extends State<Login> {
                                   prefixIcon: Icon(Icons.email)),
                               onSaved: (input) => _email = input),
                         ),
-                        Container(
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        child: Container(
                           child: TextFormField(
                               validator: (input) {
                                 if (input.length < 6)
@@ -103,31 +123,54 @@ class _LoginState extends State<Login> {
                               obscureText: true,
                               onSaved: (input) => _password = input),
                         ),
-                        SizedBox(height: 20),
-                        RaisedButton(
-                          padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                          onPressed: login,
-                          child: Text('LOGIN',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold)),
-                          color: Colors.orange,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                      TextButton(
+                        child: Text("Forgot Password?",style:TextStyle(fontSize: 15, color: lightGrey,fontWeight: FontWeight.bold,fontFamily: "WorkSans")),
+                        onPressed: () => Navigator.push(
+                            context, MaterialPageRoute(builder: (context)
+                        {
+                         return ResetScreen();
+                        })),
+                      ),
+
+                      RaisedButton(
+                        padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+                        onPressed: login,
+                        child: Text('Login',
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              // fontWeight: FontWeight.bold
+                            )),
+
+                      ),
+                    ],
                   ),
                 ),
-                GestureDetector(
-                  child: Text('Create an Account?'),
-                  onTap: navigateToSignUp,
-                )
-              ],
+              ),
             ),
-          ),
-        ));
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 18.0),
+                child: Text('Don\'t have an account ?',
+                    style: TextStyle(fontSize: 15, color: lightGrey)),
+              ),
+            ),
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 1.0),
+                child: TextButton(
+                  child: Text('Sign Up',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xFF344955),
+                          fontWeight: FontWeight.bold)),
+                  onPressed: navigateToSignUp,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    ));
   }
 }

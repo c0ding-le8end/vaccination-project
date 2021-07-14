@@ -15,7 +15,7 @@ class HospitalDetails extends StatefulWidget {
   final List<String> slots;
   final int dose1;
   final String vStatus;
-
+  final String vType;
   const HospitalDetails(
       {Key key,
       this.hospitalName,
@@ -25,12 +25,12 @@ class HospitalDetails extends StatefulWidget {
       this.slots,
       this.dose1,
       this.block,
-      this.vaccine,this.vStatus})
+      this.vaccine,this.vStatus, this.vType})
       : super(key: key);
 
   @override
   _HospitalDetailsState createState() => _HospitalDetailsState(hospitalName,
-      hospitalAddress, district, state, slots, dose1, block, vaccine,vStatus);
+      hospitalAddress, district, state, slots, dose1, block, vaccine,vStatus,vType);
 }
 
 class _HospitalDetailsState extends State<HospitalDetails> {
@@ -43,7 +43,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
   final List<String> _slots;
   final int _dose1;
   final String _vStatus;
-
+  final String _vType;
   _HospitalDetailsState(
       this._hospitalName,
       this._hospitalAddress,
@@ -52,14 +52,17 @@ class _HospitalDetailsState extends State<HospitalDetails> {
       this._slots,
       this._dose1,
       this._block,
-      this._vaccine,this._vStatus);
+      this._vaccine,
+      this._vStatus,
+      this._vType
+      );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Center"),
-        ),
+        // appBar: AppBar(
+        //   title: Text("Center"),
+        // ),
         body: ListView(
           children: [
             Container(
@@ -218,6 +221,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                     "Vaccine": {
                       "dose1": {"status": "Partially Vaccinated"},
                       'dose2': {"status": "Under Vaccination"},
+                      'vaccineType':_vType
                     }
 
                 });
@@ -232,12 +236,15 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                 "Vaccine": {
                 "dose1": {"status": "Fully Vaccinated"},
                 'dose2': {"status": "Fully Vaccinated"},
+                  'vaccineType':_vType
                 }
                 });
 
               }
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => Sample()));
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => Sample()),
+                ModalRoute.withName('MainScreen'),
+              );
             },
             child: Text('Ok')),
       ],
