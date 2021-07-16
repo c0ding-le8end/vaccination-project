@@ -59,14 +59,17 @@ VerifyScreen()));
               "gender": _gender,
               "phoneNumber": _phoneNumber,
               "age": _age,
-              "aadharNumber": _aadharNumber
+              "aadharNumber": _aadharNumber,
+              "email":_email
             },
             "Vaccine": {
 
-                "dose1": {"status": "Not Vaccinated", "name": _name},
+                "dose1": {"status": "Not Vaccinated", "name": _name,"dose1Date":null,},
 
-                "dose2": {"status": "Not Vaccinated", "name": _name},
-                "vaccineType":"Not Selected"
+                "dose2": {"status": "Not Vaccinated", "name": _name,"dose2Date":null},
+                "vaccineType":"Not Selected",
+
+
             }
           });
           // await Navigator.pushReplacementNamed(context,"/") ;
@@ -108,7 +111,7 @@ VerifyScreen()));
         appBar: AppBar(
           title: Text("Sign Up",
               style: TextStyle(
-                  fontFamily: 'WorkSans',
+                  fontFamily: 'OpenSans',
                   fontWeight: FontWeight.w900,
                   fontSize: 27,
                   fontStyle: FontStyle.normal,
@@ -146,7 +149,7 @@ VerifyScreen()));
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     labelText: 'Name',
-                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "OpenSans",fontWeight: FontWeight.bold),
 
 
                                     prefixIcon: Icon(Icons.person,color: lightGrey,
@@ -171,7 +174,7 @@ VerifyScreen()));
                                     if (input.isEmpty) return 'Enter Email';
                                   },
                                   decoration: InputDecoration(
-                                      labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                                      labelStyle: TextStyle(color : lightGrey,fontFamily: "OpenSans",fontWeight: FontWeight.bold),
                                       border: InputBorder.none,
                                       labelText: 'Email',
                                       prefixIcon: Icon(Icons.email,color: lightGrey)),
@@ -198,7 +201,7 @@ VerifyScreen()));
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     labelText: 'Password',
-                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "OpenSans",fontWeight: FontWeight.bold),
                                     prefixIcon: Icon(Icons.lock,color: lightGrey),
                                   ),
                                   obscureText: true,
@@ -224,7 +227,7 @@ VerifyScreen()));
                                   decoration: InputDecoration(
                                       labelText: "Gender",
                                       border: InputBorder.none,
-                                      labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                                      labelStyle: TextStyle(color : lightGrey,fontFamily: "OpenSans",fontWeight: FontWeight.bold),
 
                                       prefixIcon: Icon(FontAwesomeIcons.male,color: lightGrey)),
                                   value: _gender,
@@ -269,7 +272,7 @@ VerifyScreen()));
                                     counterText: "",
                                     border: InputBorder.none,
                                     labelText: 'Phone Number',
-                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "OpenSans",fontWeight: FontWeight.bold),
 
                                     prefixIcon: Icon(FontAwesomeIcons.phoneAlt,color: lightGrey),
                                   ),
@@ -305,7 +308,7 @@ VerifyScreen()));
                                     border: InputBorder.none,
                                     labelText: 'Age',
                                     prefixIcon: Icon(Icons.people,color: lightGrey,),
-                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "OpenSans",fontWeight: FontWeight.bold),
                                   ),
                                   keyboardType: TextInputType.number,
                                   onSaved: (input) => _age = input),
@@ -335,7 +338,7 @@ VerifyScreen()));
                                   decoration: InputDecoration(
                                     counterText: "",
                                     border: InputBorder.none,
-                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                                    labelStyle: TextStyle(color : lightGrey,fontFamily: "OpenSans",fontWeight: FontWeight.bold),
 
                                     labelText: 'Aadhar Number',
                                     prefixIcon: Icon(FontAwesomeIcons.fingerprint,color: lightGrey),
@@ -352,7 +355,7 @@ VerifyScreen()));
                           child: Text('Sign Up',
                               style: TextStyle(
                                   //  color: lightGrey,
-                                  fontFamily: "WorkSans",
+                                  fontFamily: "OpenSans",
                                   letterSpacing: 1,
                                   fontSize: 22.0,
                                   fontWeight: FontWeight.bold)),

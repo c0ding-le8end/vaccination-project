@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:vaccination_portal/main.dart';
 import 'package:vaccination_portal/ui/sign_up.dart';
 import 'package:vaccination_portal/ui/main screen.dart';
 
@@ -16,7 +18,8 @@ class HospitalDetails extends StatefulWidget {
   final int dose1;
   final String vStatus;
   final String vType;
-  const HospitalDetails(
+  var dose1Date;
+   HospitalDetails(
       {Key key,
       this.hospitalName,
       this.hospitalAddress,
@@ -25,12 +28,12 @@ class HospitalDetails extends StatefulWidget {
       this.slots,
       this.dose1,
       this.block,
-      this.vaccine,this.vStatus, this.vType})
+      this.vaccine,this.vStatus, this.vType, this.dose1Date})
       : super(key: key);
 
   @override
   _HospitalDetailsState createState() => _HospitalDetailsState(hospitalName,
-      hospitalAddress, district, state, slots, dose1, block, vaccine,vStatus,vType);
+      hospitalAddress, district, state, slots, dose1, block, vaccine,vStatus,vType,dose1Date);
 }
 
 class _HospitalDetailsState extends State<HospitalDetails> {
@@ -44,6 +47,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
   final int _dose1;
   final String _vStatus;
   final String _vType;
+  var _dose1Date;
   _HospitalDetailsState(
       this._hospitalName,
       this._hospitalAddress,
@@ -54,7 +58,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
       this._block,
       this._vaccine,
       this._vStatus,
-      this._vType
+      this._vType, this._dose1Date
       );
 
   @override
@@ -106,10 +110,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                       Text("${_state}")
                     ],
                   ),
-                  Divider(
-                    thickness: 0.2,
-                    color: Colors.black87,
-                  ),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
                     child: Row(
@@ -157,6 +158,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                                               child: Icon(
                                                 Icons.navigation,
                                                 size: 30,
+                                                color: yellow1,
                                               ))
                                         ],
                                       )
@@ -210,6 +212,8 @@ class _HospitalDetailsState extends State<HospitalDetails> {
         FlatButton(
             onPressed: () async {
               var dose1Status,dose2Status;
+              var vaccinationDate= DateTime.now().add(new Duration(minutes:2));
+           _dose1Date=vaccinationDate;
 
               print("$dose1Status");
               if(_vStatus=='Not Vaccinated')
@@ -221,7 +225,9 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                     "Vaccine": {
                       "dose1": {"status": "Partially Vaccinated"},
                       'dose2': {"status": "Under Vaccination"},
-                      'vaccineType':_vType
+                      'vaccineType':_vType,
+                      'dose1Date':vaccinationDate,
+                      'dose2Date':null
                     }
 
                 });
@@ -236,7 +242,9 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                 "Vaccine": {
                 "dose1": {"status": "Fully Vaccinated"},
                 'dose2': {"status": "Fully Vaccinated"},
-                  'vaccineType':_vType
+                  'vaccineType':_vType,
+                  'dose1Date':_dose1Date,
+                  'dose2Date':vaccinationDate
                 }
                 });
 

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vaccination_portal/main.dart';
 import 'package:vaccination_portal/ui/main%20screen.dart';
 
 
@@ -55,31 +56,40 @@ setState(() {
         Navigator.pop(context);
       },
       child: Scaffold(
-        body: Column(mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                  'An email has been sent to ${user.email} please verify'),
-            ),
-            RaisedButton(
-              onPressed: () {
-                print(user.sendEmailVerification());
-              },
-              child: Text(
-                  "Resend Email",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    //    color: Colors.white),
-                  )),
-              shape: ContinuousRectangleBorder(
-                  borderRadius:
-                  BorderRadius.circular(18)),
-            ),
-              Text("$stopClock",style: TextStyle
-              (fontSize: 20,fontWeight: FontWeight.bold,),)
+        body: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Center(
+            child: Container(padding: const EdgeInsets.all(15.0),height:200,decoration: BoxDecoration(border: Border.all(color: darkGrey)),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Expanded(
+                      child: Text(
+                          'An email has been sent to ${user.email} please verify'),
+                    ),
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      print(user.sendEmailVerification());
+                    },
+                    child: Text(
+                        "Resend Email",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          //    color: Colors.white),
+                        )),
+                    shape: ContinuousRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(18)),
+                  ),
+                    Text("$stopClock",style: TextStyle
+                    (fontSize: 20,fontWeight: FontWeight.bold,),)
 
-          ],
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

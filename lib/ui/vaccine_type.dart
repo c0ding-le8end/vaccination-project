@@ -10,24 +10,25 @@ import 'package:vaccination_portal/ui/schedule_screen.dart';
 
 class VaccineType extends StatefulWidget {
   final String status;
+  final dose1Date;
 
-  const VaccineType({Key key, this.status}) : super(key: key);
+  const VaccineType({Key key, this.status,this.dose1Date}) : super(key: key);
 
   @override
-  _VaccineTypeState createState() => _VaccineTypeState(status);
+  _VaccineTypeState createState() => _VaccineTypeState(status,dose1Date);
 }
 
 class _VaccineTypeState extends State<VaccineType> {
   @override
   final String _vStatus;
-
-  _VaccineTypeState(this._vStatus);
+final _dose1Date;
+  _VaccineTypeState(this._vStatus,this._dose1Date);
 
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text("Vaccine Type",style: TextStyle(
-              fontFamily: 'WorkSans',
+              fontFamily: 'OpenSans',
               fontWeight: FontWeight.w900,
               fontSize: 24,
               fontStyle: FontStyle.normal,
@@ -61,7 +62,7 @@ class _VaccineTypeState extends State<VaccineType> {
                                     MaterialPageRoute(
                                         builder: (context) => Pincode(
                                             status: _vStatus,
-                                            vaccineType: "COVISHIELD")));
+                                            vaccineType: "COVISHIELD",dose1Date:_dose1Date)));
                               },
                               child: Text("COVISHIELD"),
                             ),
@@ -75,7 +76,7 @@ class _VaccineTypeState extends State<VaccineType> {
                                     MaterialPageRoute(
                                         builder: (context) => Pincode(
                                             status: _vStatus,
-                                            vaccineType: "COVAXIN")));
+                                            vaccineType: "COVAXIN",dose1Date:_dose1Date)));
                               },
                               child: Text("COVAXIN"),
                             ),

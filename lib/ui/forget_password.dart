@@ -34,7 +34,7 @@ var emailException;
                 },
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                      labelStyle: TextStyle(color : lightGrey,fontFamily: "WorkSans",fontWeight: FontWeight.bold),
+                      labelStyle: TextStyle(color : lightGrey,fontFamily: "OpenSans",fontWeight: FontWeight.bold),
                       border: InputBorder.none,
                       labelText: 'Email',
                       prefixIcon: Icon(Icons.email,color: lightGrey)),
