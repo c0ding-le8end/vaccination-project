@@ -100,11 +100,15 @@ class _PincodeState extends State<Pincode> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ScheduleScreen(
+                                      builder: (context) {
+                                      chosenDate=Date_Get.getCurrentDate();
+                                        return ScheduleScreen(
                                           pincode: _pincode,
                                           vStatus: vStatus,
+
                                           vaccineType: _vaccineType,
-                                          dose1Date: _dose1Date)));
+                                          dose1Date: _dose1Date);
+                                      }));
                             });
                           },
                         ),
@@ -151,7 +155,7 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   Future<VaccineObject> vlist;
   final String _pincode;
-  final String _currentDate;
+  final  String _currentDate;
   final String vStatus;
   final String _vaccineType;
   final int _todayDate;
@@ -338,6 +342,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         onTap: () =>
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => HospitalDetails(
+                                  scheduleDate:chosenDate,
                                   hospitalName: hospitalName,
                                   hospitalAddress: hospitalAddress,
                                   district: district,

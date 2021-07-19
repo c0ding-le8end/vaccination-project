@@ -63,10 +63,8 @@ setState(() {
               child: Column(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Center(
-                    child: Expanded(
-                      child: Text(
-                          'An email has been sent to ${user.email} please verify'),
-                    ),
+                    child: Text(
+                        'An email has been sent to ${user.email} please verify'),
                   ),
                   RaisedButton(
                     onPressed: () {

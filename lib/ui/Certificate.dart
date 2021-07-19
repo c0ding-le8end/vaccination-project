@@ -83,14 +83,14 @@ class Certificate extends StatelessWidget {
                                   verticalAlignment: TableCellVerticalAlignment.top,
                                   child: Padding(
                                     padding: const EdgeInsets.fromLTRB(5,6,5,0),
-                                    child: Flexible(
-                                      child: Container(
-                                        child: Text(
+                                    child: Container(
+                                      child: Wrap(
+                                        children: [Text(
                                           "${name[0].toUpperCase()}${name.substring(1)}",
                                           style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
-                                        ),
-                                        // height: 30,
+                                        ),]
                                       ),
+                                      // height: 30,
                                     ),
                                   ),
                                 ),

@@ -8,6 +8,7 @@ import 'package:vaccination_portal/ui/sign_up.dart';
 import 'package:vaccination_portal/ui/main screen.dart';
 
 class HospitalDetails extends StatefulWidget {
+  final scheduleDate;
   final String hospitalName;
   final String hospitalAddress;
   final String block;
@@ -21,6 +22,7 @@ class HospitalDetails extends StatefulWidget {
   var dose1Date;
    HospitalDetails(
       {Key key,
+        this.scheduleDate,
       this.hospitalName,
       this.hospitalAddress,
       this.district,
@@ -33,10 +35,11 @@ class HospitalDetails extends StatefulWidget {
 
   @override
   _HospitalDetailsState createState() => _HospitalDetailsState(hospitalName,
-      hospitalAddress, district, state, slots, dose1, block, vaccine,vStatus,vType,dose1Date);
+      hospitalAddress, district, state, slots, dose1, block, vaccine,vStatus,vType,dose1Date,scheduleDate);
 }
 
 class _HospitalDetailsState extends State<HospitalDetails> {
+  final scheduleDate;
   final String _hospitalName;
   final String _hospitalAddress;
   final String _block;
@@ -48,6 +51,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
   final String _vStatus;
   final String _vType;
   var _dose1Date;
+
   _HospitalDetailsState(
       this._hospitalName,
       this._hospitalAddress,
@@ -58,7 +62,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
       this._block,
       this._vaccine,
       this._vStatus,
-      this._vType, this._dose1Date
+      this._vType, this._dose1Date, this.scheduleDate
       );
 
   @override
@@ -212,8 +216,8 @@ class _HospitalDetailsState extends State<HospitalDetails> {
         FlatButton(
             onPressed: () async {
               var dose1Status,dose2Status;
-              var vaccinationDate= DateTime.now().add(new Duration(minutes:2));
-           _dose1Date=vaccinationDate;
+              var vaccinationDate= scheduleDate;
+
 
               print("$dose1Status");
               if(_vStatus=='Not Vaccinated')

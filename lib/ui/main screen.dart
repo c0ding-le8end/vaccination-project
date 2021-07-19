@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +9,7 @@ import 'package:vaccination_portal/main.dart';
 import 'package:vaccination_portal/networking/api.dart';
 
 import 'package:vaccination_portal/networking/formatted_api.dart';
+import 'package:vaccination_portal/random.dart';
 import 'package:vaccination_portal/ui/schedule_screen.dart';
 import 'package:vaccination_portal/ui/vaccine_type.dart';
 
@@ -124,28 +127,23 @@ class _SampleState extends State<Sample> {
             drawer: Drawer(
               child: ListView(
                 children: <Widget>[
-                  Container(decoration: BoxDecoration(border: Border.all(color: lightGrey,style: BorderStyle.solid)),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: lightGrey, style: BorderStyle.solid)),
                     height: 200,
                     child: DrawerHeader(
-                      decoration: BoxDecoration(
-                          ),
+                      decoration: BoxDecoration(),
                       child: Container(
                         child: Image.asset(
                           "images/Logo.png",
-                          width:150,
+                          width: 150,
                           height: 150,
                         ),
-
-
-
-
                       ),
                     ),
                   ),
-                  ListTile(
-                    title: Text("Profile", style: TextStyle(fontSize: 16)),
-                    onTap: () => debugPrint("Test1"),
-                  ),
+
                   // ListTile(
                   //   title: Text("Vaccine Info",style: TextStyle(
                   //       fontSize: 16,
@@ -163,12 +161,76 @@ class _SampleState extends State<Sample> {
                   //   tileColor: Colors.blue.shade900,
                   // ),
                   ListTile(
-                    title: Text("Logout",
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
+                    title: Row(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.powerOff,
+                              color: yellow1,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Logout",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
                     onTap: signOut,
-                  )
+                  ),
+                  ListTile(
+                    title:
+                        Text("About The App", style: TextStyle(fontSize: 16)),
+                    onTap: () {
+                      Navigator.pop(context);
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return BackdropFilter(
+                                child: AlertDialog(
+                                  elevation: 0,
+                                  backgroundColor: Colors.transparent,
+                                  title: Text(
+                                    "About App",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  content: Container(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: SingleChildScrollView(
+                                            child: Text(
+                                              "’Provax’’ is an android application used to help in scheduling slots for covid-19 vaccination. The purpose of this application is to keep a track of those to be administered the doses and prevent malpractices. Thereby efficiently carrying out the vaccination drive.It provides an easy and fast way for checking available vaccine slots for any given pincode and lets users book a slot. Here users can easily find the details of vaccination centres through their mobiles. Users need to register with the application using their Aadhar card number and mobile number to start booking. Users can get details about the hospital/vaccination centre like its location, type of vaccines available and number of doses available. This system enables users to schedule a slot in the next seven days. Once the user has scheduled for the first dose the application allows the user to book the second dose after the specified amount of time based on the type of vaccine.",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "WorkSans"),
+                                            ),
+                                          ),
+                                        ),
+                                        RaisedButton(
+                                            child: Text("Ok"),
+                                            shape: ContinuousRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18)),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            })
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6));
+                          });
+                    },
+                  ),
                 ],
               ),
             ),
@@ -180,15 +242,15 @@ class _SampleState extends State<Sample> {
                   else
                     return Center(child: CircularProgressIndicator());
                 })
-          //Hospital_View(context,snapshot);
+            //Hospital_View(context,snapshot);
 
-        );
+            );
       }),
     );
   }
 
-  Container userCard(BuildContext context,
-      AsyncSnapshot<DocumentSnapshot> snapshot) {
+  Container userCard(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
     Map<String, dynamic> documentFields = snapshot.data.data();
     var name = documentFields['details']['name'];
     userName = name;
@@ -196,18 +258,15 @@ class _SampleState extends State<Sample> {
     var age = documentFields['details']['age'];
     var aadharNumber = documentFields['details']['aadharNumber'];
     var status = documentFields['Vaccine']['dose1']['status'];
-    var dose1Date = documentFields['Vaccine']['dose1']['dose1Date'];
-    var dose2Date = documentFields['Vaccine']['dose1']['dose2Date'];
+    var dose1Date = documentFields['Vaccine']['dose1Date'];
+    var dose2Date = documentFields['Vaccine']['dose2Date'];
     var vaccineType = documentFields['Vaccine']['vaccineType'];
     var gender = documentFields['details']['gender'];
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      height: 550,
+      width: MediaQuery.of(context).size.width,
+      height: 600,
       decoration: BoxDecoration(
-        //color: Colors.amberAccent,
+          //color: Colors.amberAccent,
           borderRadius: BorderRadius.circular(7)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -218,40 +277,22 @@ class _SampleState extends State<Sample> {
             children: <Widget>[
               Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Account Details",
-                        style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ))
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Account Details",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ))
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Registered Mobile Number: $phoneNumber",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ))
-            ],
-          ),
+
           //Card to show Patient Details
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              height: 400,
+              width: MediaQuery.of(context).size.width,
+              height: 500,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -288,13 +329,13 @@ class _SampleState extends State<Sample> {
                               documentFields['details']['gender'] == 'Male'
                                   ? FontAwesomeIcons.male
                                   : (documentFields['details']['gender'] ==
-                                  'Other'
-                                  ? FontAwesomeIcons.transgender
-                                  : FontAwesomeIcons.female),
-                              color: documentFields['details']['gender'] ==
-                                  'Male'
-                                  ? Colors.blue.shade900
-                                  : Colors.pinkAccent)
+                                          'Other'
+                                      ? FontAwesomeIcons.transgender
+                                      : FontAwesomeIcons.female),
+                              color:
+                                  documentFields['details']['gender'] == 'Male'
+                                      ? Colors.blue.shade900
+                                      : Colors.pinkAccent)
                         ],
                       ),
                     ),
@@ -322,6 +363,18 @@ class _SampleState extends State<Sample> {
                           )
                         ],
                       ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                            child: Text(
+                              "Mobile Number: $phoneNumber",
+                              style: TextStyle(
+                                fontSize: 17,
+                              ),
+                            ))
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -367,15 +420,15 @@ class _SampleState extends State<Sample> {
                               child: RaisedButton(
                                 onPressed: status == 'Not Vaccinated'
                                     ? () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              VaccineType(
-                                                status: status,
-                                                dose1Date: dose1Date,
-                                              )));
-                                }
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    VaccineType(
+                                                      status: status,
+                                                      dose1Date: dose1Date,
+                                                    )));
+                                      }
                                     : null,
                                 child: Text(
                                     status == 'Not Vaccinated'
@@ -387,12 +440,16 @@ class _SampleState extends State<Sample> {
                                       //  color: Colors.white),
                                     )),
                                 shape: ContinuousRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(18)),
+                                    borderRadius: BorderRadius.circular(18)),
                               ),
                             ),
                           ],
                         )),
+                    Text(dose1Date == null
+                        ? ""
+                        : (Date_Get.getCurrentDate().compareTo(dose1Date.toString())>=0
+                        ? "Vaccinated on ${dose1Date}"
+                        : "Vaccination Scheduled on ${dose1Date}")),
                     //Appointment Status
                     // Padding(
                     //   padding: const EdgeInsets.only(left:15),
@@ -431,28 +488,25 @@ class _SampleState extends State<Sample> {
                             Padding(
                               padding: const EdgeInsets.only(left: 160.0),
                               child: RaisedButton(
-                                onPressed: documentFields['Vaccine']
-                                ['dose2']['status'] ==
-                                    'Not Vaccinated' ||
-                                    documentFields['Vaccine']['dose2']
-                                    ['status'] ==
-                                        'Fully Vaccinated'
+                                onPressed: documentFields['Vaccine']['dose2']
+                                                ['status'] ==
+                                            'Not Vaccinated' ||
+                                        documentFields['Vaccine']['dose2']
+                                                ['status'] ==
+                                            'Fully Vaccinated'
                                     ? null
                                     : () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              Pincode(
-                                                  vaccineType:
-                                                  vaccineType,
-                                                  dose1Date:
-                                                  dose1Date)));
-                                },
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Pincode(
+                                                    vaccineType: vaccineType,
+                                                    dose1Date: dose1Date)));
+                                      },
                                 child: Text(
                                     documentFields['Vaccine']['dose2']
-                                    ['status'] ==
-                                        'Fully Vaccinated'
+                                                ['status'] ==
+                                            'Fully Vaccinated'
                                         ? "Scheduled"
                                         : "Schedule",
                                     style: TextStyle(
@@ -460,49 +514,48 @@ class _SampleState extends State<Sample> {
                                       fontSize: 14,
                                       //    color: Colors.white),
                                     )),
-
                                 shape: ContinuousRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(18)),
+                                    borderRadius: BorderRadius.circular(18)),
                               ),
                             ),
                           ],
                         )),
+                    dose2Date == null
+                        ? Container()
+                        : (Date_Get.getCurrentDate().compareTo(dose2Date.toString())>=0
+                        ? Text("Vaccinated on ${dose2Date}")
+                        : Text("Vaccination Scheduled on ${dose2Date}")),
                     Padding(
                       padding: const EdgeInsets.only(top: 50.0),
-                      child: RaisedButton(disabledColor: Colors.transparent,
-                        onPressed:
-                        documentFields['Vaccine']['dose2']
-                        ['status'] !=
-                            'Fully Vaccinated'
+                      child: RaisedButton(
+                        disabledColor: Colors.transparent,
+                        onPressed: documentFields['Vaccine']['dose2']
+                                    ['status'] !=
+                                'Fully Vaccinated'
                             ? null
                             : () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Certificate(name: name,
-                                          phoneNumber: phoneNumber,
-                                          age: age,
-                                          aadharNumber: aadharNumber,
-                                          gender: gender,
-                                          vaccineType: vaccineType)
-                              ));
-                        },
-                        child: documentFields['Vaccine']['dose2']
-                        ['status'] !=
-                            'Fully Vaccinated' ?
-                        Container() :
-                        Text(
-                            "Certificate",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              //    color: Colors.white),
-                            )),
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Certificate(
+                                            name: name,
+                                            phoneNumber: phoneNumber,
+                                            age: age,
+                                            aadharNumber: aadharNumber,
+                                            gender: gender,
+                                            vaccineType: vaccineType)));
+                              },
+                        child: documentFields['Vaccine']['dose2']['status'] !=
+                                'Fully Vaccinated'
+                            ? Container()
+                            : Text("Certificate",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  //    color: Colors.white),
+                                )),
                         shape: ContinuousRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(18)),
+                            borderRadius: BorderRadius.circular(18)),
                       ),
                     ),
                   ],

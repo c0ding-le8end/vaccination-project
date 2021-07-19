@@ -78,7 +78,7 @@ class _RadioListBuilderState extends State<RadioListBuilder> {
   _RadioListBuilderState(this._todayDate);
 
   int id = 0;
-  String init_date; //Date_Get.getCurrentDate();
+  var init_date; //Date_Get.getCurrentDate();
   @override
   void initState() {
     super.initState();
