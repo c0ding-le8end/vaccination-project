@@ -15,6 +15,7 @@ import 'package:vaccination_portal/ui/sign_up.dart';
 Color lightGrey = Color(0xFF344955);
 Color yellow1 = Color(0xFFF9AA33);
 Color darkGrey=Color(0xFF232F34);
+Color paleGrey=Color(0xFF707E86);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,37 +45,39 @@ class MyApp extends StatelessWidget {
     //scaffoldBackgroundColor: Color(0xFF344955),
     final ThemeData base = ThemeData.light();
     return base.copyWith(
-        //brightness: Brightness.light,
-        scaffoldBackgroundColor: Color(0xFFF3F3F3),
-        //  backgroundColor: Color(0xFFF344955),
-        primaryColor: Color(0xFF344955),
-        iconTheme: IconThemeData(
-          color: Colors.green,
+      //brightness: Brightness.light,
+      scaffoldBackgroundColor: Color(0xFFF3F3F3),
+      //  backgroundColor: Color(0xFFF344955),
+      primaryColor: Color(0xFF344955),
+      iconTheme: IconThemeData(
+        color: Colors.green,
+      ),
+      buttonTheme: ButtonThemeData(
+        disabledColor: paleGrey,
+        buttonColor: Color(0xFFF9AA33),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
         ),
-        buttonTheme: ButtonThemeData(
-          buttonColor: Color(0xFFF9AA33),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ),
-        //Color(0xFF344955)  //F9AA33
-        textTheme: getTextTheme(base.textTheme),
-        dialogTheme: DialogTheme(
+      ),
 
-            contentTextStyle: TextStyle(
-              color: lightGrey,
-              fontFamily: "OpenSans",
-            ),
-            titleTextStyle: TextStyle(
-              color: yellow1,
-              fontFamily: "OpenSans",
-              fontWeight: FontWeight.bold
-            ),),
+      //Color(0xFF344955)  //F9AA33
+      textTheme: getTextTheme(base.textTheme),
+      dialogTheme: DialogTheme(
+
+        contentTextStyle: TextStyle(
+          color: lightGrey,
+          fontFamily: "OpenSans",
+        ),
+        titleTextStyle: TextStyle(
+            color: yellow1,
+            fontFamily: "OpenSans",
+            fontWeight: FontWeight.bold
+        ),),
 
 
 // buttontext 232F34
 
-        );
+    );
   }
 
   TextTheme getTextTheme(TextTheme base) {

@@ -147,7 +147,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                                     children: [
                                       Text(
                                         "${_slots[index]}",
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: 20,color: paleGrey),
                                       ),
                                       Row(
                                         children: [
