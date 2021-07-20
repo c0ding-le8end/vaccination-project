@@ -1,38 +1,33 @@
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vaccination_portal/main.dart';
-import 'package:vaccination_portal/networking/api.dart';
-
 import 'package:vaccination_portal/networking/formatted_api.dart';
-import 'package:vaccination_portal/random.dart';
-import 'package:vaccination_portal/ui/schedule_screen.dart';
+import 'package:vaccination_portal/ui/about_app.dart';
+import 'package:vaccination_portal/util/get_date.dart';
+import 'package:vaccination_portal/ui/pincode_choice.dart';
 import 'package:vaccination_portal/ui/vaccine_type.dart';
-
+import 'package:vaccination_portal/util/global_variables.dart';
 import 'Certificate.dart';
-import 'sign_up.dart';
 
-String userName;
-int statusIndex = 0;
 
-class Sample extends StatefulWidget {
-  const Sample({
+
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({
     Key key,
   }) : super(key: key);
 
   @override
-  _SampleState createState() => _SampleState();
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _SampleState extends State<Sample> {
+class _MainScreenState extends State<MainScreen> {
   Future<VaccineObject> vList;
   bool shouldPop = true;
 
-  // String _pincode="560078";
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User user;
   bool isloggedin = false;
@@ -78,7 +73,6 @@ class _SampleState extends State<Sample> {
 
   @override
   void initState() {
-    // vList = VaccineData().getdata(pincode:_pincode);
     this.checkAuthentification();
     this.getUser();
 
@@ -88,26 +82,29 @@ class _SampleState extends State<Sample> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+      // ignore: missing_return
       onWillPop: () async {
         showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
                 content: Container(
-                  child: Text("SignOut?"),
+                  child: Text("SignOut ?",style: TextStyle(color: darkGrey,fontWeight: FontWeight.bold)),
                 ),
                 actions: [
+                  // ignore: deprecated_member_use
                   FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Cancel')),
+                      child: Text('Cancel',style: TextStyle(color: lightGrey,))),
+                  // ignore: deprecated_member_use
                   FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                         signOut();
                       },
-                      child: Text('Ok')),
+                      child: Text('Ok',style: TextStyle(color: lightGrey,))),
                 ],
               );
             });
@@ -184,50 +181,13 @@ class _SampleState extends State<Sample> {
                   ),
                   ListTile(
                     title:
-                    Text("About The App", style: TextStyle(fontSize: 16)),
+                        Text("About The App", style: TextStyle(fontSize: 16)),
                     onTap: () {
                       Navigator.pop(context);
                       showDialog(
                           context: context,
                           builder: (context) {
-                            return BackdropFilter(
-                                child: AlertDialog(
-                                  elevation: 0,
-                                  backgroundColor: Colors.transparent,
-                                  title: Text(
-                                    "About App",
-                                    style:
-                                    TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  content: Container(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: SingleChildScrollView(
-                                            child: Text(
-                                              "’Provax’’ is an android application used to help in scheduling slots for covid-19 vaccination. The purpose of this application is to keep a track of those to be administered the doses and prevent malpractices. Thereby efficiently carrying out the vaccination drive.It provides an easy and fast way for checking available vaccine slots for any given pincode and lets users book a slot. Here users can easily find the details of vaccination centres through their mobiles. Users need to register with the application using their Aadhar card number and mobile number to start booking. Users can get details about the hospital/vaccination centre like its location, type of vaccines available and number of doses available. This system enables users to schedule a slot in the next seven days. Once the user has scheduled for the first dose the application allows the user to book the second dose after the specified amount of time based on the type of vaccine.",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: "WorkSans"),
-                                            ),
-                                          ),
-                                        ),
-                                        RaisedButton(
-                                            child: Text("Ok"),
-                                            shape: ContinuousRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.circular(18)),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            })
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6));
+                            return AboutApp(context).aboutApp();
                           });
                     },
                   ),
@@ -242,9 +202,9 @@ class _SampleState extends State<Sample> {
                   else
                     return Center(child: CircularProgressIndicator());
                 })
-          //Hospital_View(context,snapshot);
+            //Hospital_View(context,snapshot);
 
-        );
+            );
       }),
     );
   }
@@ -262,11 +222,16 @@ class _SampleState extends State<Sample> {
     var dose2Date = documentFields['Vaccine']['dose2Date'];
     var vaccineType = documentFields['Vaccine']['vaccineType'];
     var gender = documentFields['details']['gender'];
+    var doseStyle = TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15);
+    var vaccinationStatusStyle = TextStyle(color: paleGrey);
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 600,
       decoration: BoxDecoration(
-        //color: Colors.amberAccent,
+          //color: Colors.amberAccent,
           borderRadius: BorderRadius.circular(7)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -277,13 +242,13 @@ class _SampleState extends State<Sample> {
             children: <Widget>[
               Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.only(top:8.0,left: 8),
-                    child: Text("Account Details",
-                        style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ))
+                padding: const EdgeInsets.only(top: 8.0, left: 8),
+                child: Text("Account Details",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ))
             ],
           ),
 
@@ -310,16 +275,18 @@ class _SampleState extends State<Sample> {
                               borderRadius: BorderRadius.circular(2.0)),
                           color: Color(0xFFFBCC84),
                           child: Text(
-                            "${status}",
+                            "$status",
                             style: TextStyle(
-
                               color: darkGrey,
                               //   fontWeight: FontWeight.w600,
                               fontSize: 18,
                             ),
                           ),
                         ),
-                        Text("${vaccineType=='Not Selected'?"":vaccineType}",style: TextStyle(fontSize: 18,color: darkGrey),)
+                        Text(
+                          "${vaccineType == 'Not Selected' ? "" : vaccineType}",
+                          style: TextStyle(fontSize: 18, color: darkGrey),
+                        )
                       ],
                     ),
                     Padding(
@@ -337,13 +304,10 @@ class _SampleState extends State<Sample> {
                               documentFields['details']['gender'] == 'Male'
                                   ? FontAwesomeIcons.male
                                   : (documentFields['details']['gender'] ==
-                                  'Other'
-                                  ? FontAwesomeIcons.transgender
-                                  : FontAwesomeIcons.female),
-                              color:
-                              documentFields['details']['gender'] == 'Male'
-                                  ? Colors.blue.shade900
-                                  : Colors.pinkAccent)
+                                          'Other'
+                                      ? FontAwesomeIcons.transgender
+                                      : FontAwesomeIcons.female),color: lightGrey,
+                          )
                         ],
                       ),
                     ),
@@ -367,7 +331,7 @@ class _SampleState extends State<Sample> {
                         children: <Widget>[
                           Text(
                             "Age: $age ",
-                            style: TextStyle(fontSize: 17,color: paleGrey),
+                            style: TextStyle(fontSize: 17, color: paleGrey),
                           )
                         ],
                       ),
@@ -377,19 +341,20 @@ class _SampleState extends State<Sample> {
                       children: <Widget>[
                         Flexible(
                             child: Text(
-                              "Mobile Number: $phoneNumber",
-                              style: TextStyle(
-                                fontSize: 17,color: paleGrey,
-                              ),
-                            ))
+                          "Mobile Number: $phoneNumber",
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: paleGrey,
+                          ),
+                        ))
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          "Aadhaar ID: $aadharNumber",
-                          style: TextStyle(fontSize: 17,color: paleGrey),
+                          "Aadhaar ID: ${aadharNumber.substring(0,4)}-${aadharNumber.substring(4,8)}-${aadharNumber.substring(8,12)}",
+                          style: TextStyle(fontSize: 17, color: paleGrey),
                         ),
                       ],
                     ),
@@ -416,38 +381,35 @@ class _SampleState extends State<Sample> {
                               padding: const EdgeInsets.only(left: 10.0),
                               child: Text(
                                 "Dose 1",
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15),
+                                style: doseStyle,
                               ),
                             ),
                             //Schedule Button-Navigates to Scheduling screen
                             Padding(
                               padding: const EdgeInsets.only(left: 160.0),
+                              // ignore: deprecated_member_use
                               child: RaisedButton(
                                 elevation: 8,
                                 onPressed: status == 'Not Vaccinated'
                                     ? () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              VaccineType(
-                                                status: status,
-                                                dose1Date: dose1Date,
-                                              )));
-                                }
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    VaccineType(
+                                                      status: status,
+                                                      dose1Date: dose1Date,
+                                                    )));
+                                      }
                                     : null,
                                 child: Text(
                                     status == 'Not Vaccinated'
                                         ? "Schedule"
                                         : "Scheduled",
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,color: darkGrey
-
-                                    )),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: darkGrey)),
                                 shape: ContinuousRectangleBorder(
                                     borderRadius: BorderRadius.circular(18)),
                               ),
@@ -455,12 +417,18 @@ class _SampleState extends State<Sample> {
                           ],
                         )),
                     Padding(
-                      padding:  EdgeInsets.only(right: MediaQuery.of(context).size.width /3),
-                      child: Text(dose1Date == null
-                          ? ""
-                          : (Date_Get.getCurrentDate().compareTo(dose1Date.toString())>=0
-                          ? "Vaccinated on ${dose1Date}"
-                          : "Vaccination Scheduled on ${dose1Date}"),style: TextStyle(color: paleGrey),),
+                      padding: EdgeInsets.only(
+                          right: MediaQuery.of(context).size.width / 3),
+                      child: Text(
+                        dose1Date == null
+                            ? ""
+                            : (DateGet.getCurrentDate()
+                                        .compareTo(dose1Date.toString()) >=
+                                    0
+                                ? "Vaccinated on $dose1Date"
+                                : "      Vaccination Scheduled on $dose1Date"),
+                        style: vaccinationStatusStyle,textAlign: TextAlign.center,
+                      ),
                     ),
                     //Appointment Status
                     // Padding(
@@ -490,46 +458,44 @@ class _SampleState extends State<Sample> {
                               padding: const EdgeInsets.only(left: 10.0),
                               child: Text(
                                 "Dose 2",
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15),
+                                style: doseStyle,
                               ),
                             ),
-                            
+
                             //Schedule Button-Navigates to Scheduling screen
                             Padding(
                               padding: const EdgeInsets.only(left: 160.0),
+                              // ignore: deprecated_member_use
                               child: RaisedButton(
                                 elevation: 8,
                                 // disabledColor: paleGrey,
                                 onPressed: documentFields['Vaccine']['dose2']
-                                ['status'] ==
-                                    'Not Vaccinated' ||
-                                    documentFields['Vaccine']['dose2']
-                                    ['status'] ==
-                                        'Fully Vaccinated'
+                                                ['status'] ==
+                                            'Not Vaccinated' ||
+                                        documentFields['Vaccine']['dose2']
+                                                ['status'] ==
+                                            'Fully Vaccinated'
                                     ? null
                                     : () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Pincode(
-                                              vaccineType: vaccineType,
-                                              dose1Date: dose1Date)));
-                                },
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Pincode(
+                                                    vaccineType: vaccineType,
+                                                    dose1Date: dose1Date)));
+                                      },
                                 child: Text(
                                     documentFields['Vaccine']['dose2']
-                                    ['status'] ==
-                                        'Fully Vaccinated'
+                                                ['status'] ==
+                                            'Fully Vaccinated'
                                         ? "Scheduled"
                                         : "Schedule",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
                                         color: darkGrey
-                                      //    color: Colors.white),
-                                    )),
+                                        //    color: Colors.white),
+                                        )),
                                 shape: ContinuousRectangleBorder(
                                     borderRadius: BorderRadius.circular(18)),
                               ),
@@ -537,42 +503,49 @@ class _SampleState extends State<Sample> {
                           ],
                         )),
                     Padding(
-                      padding:  EdgeInsets.only(right: MediaQuery.of(context).size.width /3),
-                      child: Text(dose2Date == null
-                          ? ""
-                          : (Date_Get.getCurrentDate().compareTo(dose2Date.toString())>=0
-                          ? "Vaccinated on ${dose2Date},"
-                          : "Vaccination Scheduled on ${dose2Date}"),style: TextStyle(color: paleGrey),),
+                      padding: EdgeInsets.only(
+                          right: MediaQuery.of(context).size.width / 3),
+                      child: Text(
+                        dose2Date == null
+                            ? ""
+                            : (DateGet.getCurrentDate()
+                                        .compareTo(dose2Date.toString()) >=
+                                    0
+                                ? "Vaccinated on $dose2Date,"
+                                : "      Vaccination Scheduled on $dose2Date"),
+                        style: vaccinationStatusStyle,textAlign: TextAlign.center,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 50.0),
+                      // ignore: deprecated_member_use
                       child: RaisedButton(
                         disabledColor: Colors.transparent,
                         onPressed: documentFields['Vaccine']['dose2']
-                        ['status'] !=
-                            'Fully Vaccinated'
+                                    ['status'] !=
+                                'Fully Vaccinated'
                             ? null
                             : () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Certificate(
-                                      name: name,
-                                      phoneNumber: phoneNumber,
-                                      age: age,
-                                      aadharNumber: aadharNumber,
-                                      gender: gender,
-                                      vaccineType: vaccineType)));
-                        },
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Certificate(
+                                            name: name,
+                                            phoneNumber: phoneNumber,
+                                            age: age,
+                                            aadharNumber: aadharNumber,
+                                            gender: gender,
+                                            vaccineType: vaccineType)));
+                              },
                         child: documentFields['Vaccine']['dose2']['status'] !=
-                            'Fully Vaccinated'
+                                'Fully Vaccinated'
                             ? Container()
                             : Text("Certificate",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              //    color: Colors.white),
-                            )),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  //    color: Colors.white),
+                                )),
                         shape: ContinuousRectangleBorder(
                             borderRadius: BorderRadius.circular(18)),
                       ),
@@ -587,41 +560,3 @@ class _SampleState extends State<Sample> {
     );
   }
 }
-
-// onPressed: () => {
-// Navigator.push(context, MaterialPageRoute(builder: (context)=>Pincode()))
-
-// Widget Hospital_View(context,snapshot)
-// {
-//   return ListView.builder(
-// //     itemCount: snapshot.data.sessions.length,
-// //     scrollDirection:Axis.vertical,
-//     itemBuilder: (context,int index)
-//     {
-//       return Column(
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Container(
-//               decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(10),
-//                   color: Colors.blueGrey.shade900
-//               ),
-//               width: MediaQuery.of(context).size.width,
-//               height: 100,
-//               child: Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: Text("${snapshot.data.sessions[index].name}",
-//                   style: TextStyle(
-//                       color: Colors.white
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       );
-//     }
-//     ,);
-// }

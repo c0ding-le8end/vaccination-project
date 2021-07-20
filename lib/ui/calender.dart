@@ -1,13 +1,12 @@
 // ignore: avoid_web_libraries_in_flutter
-import 'package:http/http.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:vaccination_portal/random.dart';
+import 'package:vaccination_portal/util/get_date.dart';
 import 'package:vaccination_portal/ui/schedule_screen.dart';
+import 'package:vaccination_portal/util/global_variables.dart';
 
-String chosenDate;
+
 
 class Calender extends StatefulWidget {
   final String vaccineType;
@@ -40,11 +39,13 @@ class _CalenderState extends State<Calender> {
         height: 150,
       ),
       actions: <Widget>[
+        // ignore: deprecated_member_use
         FlatButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Cancel')),
+            child: Text('Cancel',style: TextStyle(color: lightGrey,),)),
+        // ignore: deprecated_member_use
         FlatButton(
             onPressed: () {
               Navigator.of(context).pop();
@@ -57,7 +58,7 @@ class _CalenderState extends State<Calender> {
                     dose1Date: _dose1Date,
                       )));
             },
-            child: Text('OK')),
+            child: Text('OK',style: TextStyle(color: lightGrey,))),
       ],
     );
   }
@@ -78,22 +79,23 @@ class _RadioListBuilderState extends State<RadioListBuilder> {
   _RadioListBuilderState(this._todayDate);
 
   int id = 0;
+  // ignore: non_constant_identifier_names
   var init_date; //Date_Get.getCurrentDate();
   @override
   void initState() {
     super.initState();
-    init_date = Date_Get.getCurrentDate();
+    init_date = DateGet.getCurrentDate();
     id = _todayDate;
   }
 
   List<DateObject> week = [
-    DateObject(index: 0, date: Date_Get.getCurrentDate()),
-    DateObject(index: 1, date: Date_Get.getNewDate(1)),
-    DateObject(index: 2, date: Date_Get.getNewDate(2)),
-    DateObject(index: 3, date: Date_Get.getNewDate(3)),
-    DateObject(index: 4, date: Date_Get.getNewDate(4)),
-    DateObject(index: 5, date: Date_Get.getNewDate(5)),
-    DateObject(index: 6, date: Date_Get.getNewDate(6))
+    DateObject(index: 0, date: DateGet.getCurrentDate()),
+    DateObject(index: 1, date: DateGet.getNewDate(1)),
+    DateObject(index: 2, date: DateGet.getNewDate(2)),
+    DateObject(index: 3, date: DateGet.getNewDate(3)),
+    DateObject(index: 4, date: DateGet.getNewDate(4)),
+    DateObject(index: 5, date: DateGet.getNewDate(5)),
+    DateObject(index: 6, date: DateGet.getNewDate(6))
   ];
 
   @override
@@ -102,8 +104,8 @@ class _RadioListBuilderState extends State<RadioListBuilder> {
       Container(
           child: Column(
         children: week
-            .map((data) => RadioListTile(
-                title: Text(("${data.date}")),
+            .map((data) => RadioListTile(activeColor: yellow1,
+                title: Text(("${data.date}"),style: TextStyle(color: darkGrey,fontWeight: FontWeight.bold)),
                 value: data.index,
                 groupValue: id,
                 onChanged: (val) {

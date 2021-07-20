@@ -1,133 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vaccination_portal/main.dart';
 import 'package:vaccination_portal/networking/api.dart';
 import 'package:vaccination_portal/networking/formatted_api.dart';
 import 'package:vaccination_portal/ui/calender.dart';
 import 'package:vaccination_portal/ui/hospital_details.dart';
-import 'package:vaccination_portal/ui/sign_up.dart';
+import 'package:vaccination_portal/util/global_variables.dart';
 
-import '../random.dart';
 
-class Pincode extends StatefulWidget {
-  final String status;
-  final String vaccineType;
-  final dose1Date;
 
-  const Pincode({this.status, Key key, this.vaccineType, this.dose1Date})
-      : super(key: key);
 
-  @override
-  _PincodeState createState() => _PincodeState(status, vaccineType, dose1Date);
-}
 
-class _PincodeState extends State<Pincode> {
-  var _pincode;
-  Future vList;
-  var date;
-  final String vStatus;
-  final String _vaccineType;
-  final _dose1Date;
 
-  _PincodeState(this.vStatus, this._vaccineType, this._dose1Date);
 
-  @override
-  void initState() {
-    super.initState();
-
-    // TODO: implement initState
-    // vList=VaccineData().getdata();
-    // vList=VaccineData().getdata();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Book Appointment",
-            style: TextStyle(
-                fontFamily: 'OpenSans',
-                fontWeight: FontWeight.w900,
-                fontSize: 24,
-                fontStyle: FontStyle.normal,
-                letterSpacing: 1)),
-        centerTitle: false,
-      ),
-      body: FutureBuilder(
-        future: vList,
-        builder: (context, AsyncSnapshot snapshot) {
-          return Padding(
-            padding: const EdgeInsets.all(38.0),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 300,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "PinCode",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: yellow1, width: 3),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextField(
-                          style: TextStyle(fontSize: 19.0),
-                          decoration: InputDecoration(
-                              counterText: "",
-                              hintText: "Enter PinCode",
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 10),
-                              prefixIcon: Icon(FontAwesomeIcons.search),
-                              border: InputBorder.none),
-                          maxLength: 6,
-                          cursorColor: yellow1,
-                          keyboardType: TextInputType.number,
-                          onSubmitted: (value) {
-                            setState(() {
-                              _pincode = value;
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) {
-                                      chosenDate=Date_Get.getCurrentDate();
-                                        return ScheduleScreen(
-                                          pincode: _pincode,
-                                          vStatus: vStatus,
-
-                                          vaccineType: _vaccineType,
-                                          dose1Date: _dose1Date);
-                                      }));
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  //Text("${_pincode}"),
-                  Spacer()
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-String selectedPincode;
 
 class ScheduleScreen extends StatefulWidget {
   final String pincode;
@@ -160,13 +44,14 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   final String _vaccineType;
   final int _todayDate;
   final _dose1Date;
-  Stream<DocumentSnapshot> _doseDoc;
+
 
   _ScheduleScreenState(this._pincode, this._currentDate, this.vStatus,
       this._vaccineType, this._todayDate, this._dose1Date);
 
   @override
   // TODO: implement widget
+  // ignore: missing_return
   ScheduleScreen get widget {
     super.widget;
   }
@@ -185,7 +70,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     int i = 0;
     int j = 0;
     int containerCount = 0;
-    var containerList;
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Vaccination Centres",
@@ -257,10 +142,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   if (dose != 0 && vType == _vaccineType) {
                     return Container(
                       width: MediaQuery.of(context).size.width,
-                      //color: Colors.blue,
                       child: InkWell(
                         child: Card(
-                          //color: Colors.blue.shade900,
+
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,7 +156,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(
-                                        "${hospitalName}",
+                                        "$hospitalName",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
 
@@ -285,7 +169,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      "Doses Available: ${dose}",
+                                      "Doses Available: $dose",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           color: dose <= 10
@@ -307,9 +191,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                         Expanded(
                                             child: Text(
                                                 "${snapshot.data.sessions[index].address}",
-                                                style: TextStyle(
+                                                style: TextStyle(color: paleGrey,
                                                   fontWeight:
-                                                  FontWeight.normal,))),
+                                                  FontWeight.bold,))),
                                         Text(
                                             "${snapshot.data.sessions[index].blockName}")
                                       ],
@@ -324,18 +208,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                             feeType=="Paid"?"Cost: ₹$fee":"Free",
                                             style: TextStyle(
                                                 fontWeight:
-                                                FontWeight.normal,
-                                                color: Colors.black))),
+                                                FontWeight.bold,
+                                                color: lightGrey))),
                                   ],
 
                                 ),
                               )
-                              // Padding(
-                              //   padding: const EdgeInsets.only(top :8.0,bottom: 8),
-                              //   child: Container(
-                              //     height: 0.5, color: Colors.grey,
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),

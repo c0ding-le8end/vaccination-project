@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:vaccination_portal/util/global_variables.dart';
 
-import '../main.dart';
+
 
 
 class ResetScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ var emailException;
                 decoration: BoxDecoration(
                   border: Border.all(color: yellow1, width:3),
                   borderRadius: BorderRadius.circular(20),),
+                // ignore: missing_return
                 child: TextFormField(validator: (value) {
                   if (value.isEmpty) return 'Enter Email';
 
@@ -47,6 +49,7 @@ var emailException;
               ),
             ),
             Center(
+              // ignore: deprecated_member_use
               child: RaisedButton(
                 child: Text('Send Request'),
                 onPressed: () async{
@@ -61,6 +64,7 @@ var emailException;
                          content: Text(
                              "A link has been sent to your email to reset the password."),
                          actions: <Widget>[
+                           // ignore: deprecated_member_use
                            FlatButton(
                                onPressed: () {
                                  Navigator.of(context).pop();
@@ -98,6 +102,7 @@ var emailException;
             title: Text('ERROR'),
             content: Text(errormessage),
             actions: <Widget>[
+              // ignore: deprecated_member_use
               FlatButton(
                   onPressed: () {
                     Navigator.of(context).pop();

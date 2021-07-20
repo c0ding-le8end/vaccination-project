@@ -1,21 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:vaccination_portal/ui/TestDB.dart';
-import 'package:vaccination_portal/ui/loading_screen.dart';
-
 import 'package:vaccination_portal/ui/main%20screen.dart';
-
-import 'package:vaccination_portal/ui/schedule_screen.dart';
 import 'package:vaccination_portal/ui/sign_in.dart';
 import 'package:vaccination_portal/ui/sign_up.dart';
+import 'package:vaccination_portal/util/global_variables.dart';
 
-Color lightGrey = Color(0xFF344955);
-Color yellow1 = Color(0xFFF9AA33);
-Color darkGrey=Color(0xFF232F34);
-Color paleGrey=Color(0xFF707E86);
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,11 +22,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: appTheme(),
       debugShowCheckedModeBanner: false,
-      home: Sample(),
+      home: MainScreen(),
       routes: <String, WidgetBuilder>{
         "Login": (BuildContext context) => Login(),
         "SignUp": (BuildContext context) => SignUp(),
-        "MainScreen": (BuildContext context) => Sample(),
+        "MainScreen": (BuildContext context) => MainScreen(),
       },
     );
   }
@@ -75,17 +67,17 @@ class MyApp extends StatelessWidget {
         ),),
 
 
-// buttontext 232F34
+
 
     );
   }
 
   TextTheme getTextTheme(TextTheme base) {
     return base.copyWith(
-      title: base.title.copyWith(color: Colors.blue),
-      subtitle: base.subtitle1.copyWith(
+      headline6: base.headline6.copyWith(color: Colors.blue),
+      subtitle2: base.subtitle2.copyWith(
           fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green),
-      body1: base.body1.copyWith(
+      bodyText2: base.bodyText2.copyWith(
         fontWeight: FontWeight.bold,
         color: Color(0xFF232F34),
         fontFamily: "OpenSans",

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:vaccination_portal/main.dart';
+import 'package:vaccination_portal/util/global_variables.dart';
 
 class Certificate extends StatelessWidget {
   final name, phoneNumber, age, aadharNumber, vaccineType, gender;
@@ -59,11 +59,6 @@ class Certificate extends StatelessWidget {
                           border: TableBorder.symmetric(outside: BorderSide(
                             width:2,
                           )),
-                          // columnWidths: <int, TableColumnWidth>{
-                          //   0: IntrinsicColumnWidth(),
-                          //   1: FlexColumnWidth(),
-                          //   2: FixedColumnWidth(64),
-                          // },
                           defaultVerticalAlignment: TableCellVerticalAlignment.top,
                           children: <TableRow>[
                             TableRow(

@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vaccination_portal/main.dart';
-import 'package:vaccination_portal/ui/main%20screen.dart';
+import 'package:vaccination_portal/util/global_variables.dart';
+
 
 
 class VerifyScreen extends StatefulWidget {
@@ -50,6 +51,7 @@ setState(() {
   Widget build(BuildContext context) {
 
     return WillPopScope(
+      // ignore: missing_return
       onWillPop: () async
       {await user.delete();
         FirebaseFirestore.instance.collection("users").doc(user.uid).delete();
@@ -66,6 +68,7 @@ setState(() {
                     child: Text(
                         'An email has been sent to ${user.email} please verify'),
                   ),
+                  // ignore: deprecated_member_use
                   RaisedButton(
                     onPressed: () {
                       print(user.sendEmailVerification());

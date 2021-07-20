@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:vaccination_portal/networking/formatted_api.dart';
 
-import '../random.dart';
+import '../util/get_date.dart';
 
 class VaccineData
 {
@@ -13,9 +13,9 @@ class VaccineData
 
   Future<VaccineObject> getdata({String pincode, var date}) async
   {
-    var today = Date_Get.getCurrentDate();
+    var today = DateGet.getCurrentDate();
     //var newDate=Date_Get.getNewDate(0);
-    var newDate= date==null?Date_Get.getNewDate(0):date;
+    var newDate= date==null?DateGet.getNewDate(0):date;
     var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+pincode+"&date="+newDate;
     print("$url");
     //var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=%22+pincode+%22&date=%22+$today";

@@ -1,12 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vaccination_portal/networking/api.dart';
+import 'package:vaccination_portal/ui/pincode_choice.dart';
 
-import 'package:vaccination_portal/networking/formatted_api.dart';
-import 'package:vaccination_portal/ui/schedule_screen.dart';
 
 class VaccineType extends StatefulWidget {
   final String status;
@@ -19,7 +14,6 @@ class VaccineType extends StatefulWidget {
 }
 
 class _VaccineTypeState extends State<VaccineType> {
-  @override
   final String _vStatus;
 final _dose1Date;
   _VaccineTypeState(this._vStatus,this._dose1Date);
@@ -55,6 +49,7 @@ final _dose1Date;
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),
+                            // ignore: deprecated_member_use
                             child: RaisedButton(
                               onPressed: () {
                                 Navigator.push(
@@ -69,6 +64,7 @@ final _dose1Date;
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),
+                            // ignore: deprecated_member_use
                             child: RaisedButton(
                               onPressed: () {
                                 Navigator.push(

@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:vaccination_portal/main.dart';
-import 'package:vaccination_portal/ui/sign_up.dart';
 import 'package:vaccination_portal/ui/main screen.dart';
+import 'package:vaccination_portal/util/global_variables.dart';
 
+// ignore: must_be_immutable
 class HospitalDetails extends StatefulWidget {
   final scheduleDate;
   final String hospitalName;
@@ -83,7 +81,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 10.0, horizontal: 20),
-                    child: Text("${_hospitalName}",
+                    child: Text("$_hospitalName",
                         style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
@@ -98,9 +96,9 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 5.0, horizontal: 8),
                     child: Text(
-                      "${_hospitalAddress}",
+                      "$_hospitalAddress",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 15,color: paleGrey),
                     ),
                   ),
                   SizedBox(
@@ -109,9 +107,9 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(_block == null ? 'N/A' : "${_block}"),
-                      Text("${_district}"),
-                      Text("${_state}")
+                      Text(_block == null ? 'N/A' : "$_block",style: TextStyle(color: paleGrey),),
+                      Text("$_district",style: TextStyle(color: paleGrey)),
+                      Text("$_state",style: TextStyle(color: paleGrey))
                     ],
                   ),
 
@@ -121,11 +119,11 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "${_vaccine}",
+                          "$_vaccine",
                           style: TextStyle(fontSize: 28),
                         ),
                         Text(
-                          "Capacity : ${_dose1}",
+                          "Capacity : $_dose1",
                           style: TextStyle(fontSize: 20),
                         )
                       ],
@@ -194,6 +192,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
         );
   }
 
+  // ignore: non_constant_identifier_names
   ScheduleDate() async {
     await FirebaseFirestore.instance
         .collection("users")
@@ -201,21 +200,24 @@ class _HospitalDetailsState extends State<HospitalDetails> {
         .set({"name": userName, "hospitalName": _hospitalName});
   }
 
+  // ignore: non_constant_identifier_names
   Widget ConfirmationScreen(BuildContext context) {
     return AlertDialog(
-      title: Text("Confirm!"),
+      title: Text("Confirm!",style: TextStyle(color: yellow1,)),
       content: Container(
-        child: Text("Confirm Slot"),
+        child: Text("Do you want to Confirm The Slot ?",style: TextStyle(color: darkGrey,fontWeight: FontWeight.bold)),
       ),
       actions: [
+        // ignore: deprecated_member_use
         FlatButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Cancel')),
+            child: Text('Cancel',style: TextStyle(color: lightGrey,))),
+        // ignore: deprecated_member_use
         FlatButton(
             onPressed: () async {
-              var dose1Status,dose2Status;
+              var dose1Status;
               var vaccinationDate= scheduleDate;
 
 
@@ -254,11 +256,11 @@ class _HospitalDetailsState extends State<HospitalDetails> {
 
               }
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => Sample()),
+                  MaterialPageRoute(builder: (context) => MainScreen()),
                 ModalRoute.withName('MainScreen'),
               );
             },
-            child: Text('Ok')),
+            child: Text('Ok',style: TextStyle(color: lightGrey,))),
       ],
     );
   }

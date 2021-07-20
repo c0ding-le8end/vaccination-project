@@ -3,11 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vaccination_portal/main.dart';
-import 'package:vaccination_portal/ui/main%20screen.dart';
 import 'package:vaccination_portal/ui/verify_email.dart';
+import 'package:vaccination_portal/util/global_variables.dart';
 
-User userDetails;
 
 class SignUp extends StatefulWidget {
   @override
@@ -44,9 +42,6 @@ VerifyScreen()));
         UserCredential user = await _auth.createUserWithEmailAndPassword(
             email: _email, password: _password);
         if (user != null) {
-          // UserUpdateInfo updateuser = UserUpdateInfo();
-          // updateuser.displayName = _name;
-          //  user.updateProfile(updateuser);
           await _auth.currentUser.updateProfile(displayName: _name);
           userDetails = user.user;
           statusIndex=0;
@@ -90,6 +85,7 @@ VerifyScreen()));
             title: Text('ERROR'),
             content: Text(errormessage),
             actions: <Widget>[
+              // ignore: deprecated_member_use
               FlatButton(
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -103,6 +99,7 @@ VerifyScreen()));
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+      // ignore: missing_return
       onWillPop: () async
       {
         await Navigator.pushReplacementNamed(context,"Login") ;
@@ -143,6 +140,7 @@ VerifyScreen()));
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
                                 cursorColor: yellow1,
+                                  // ignore: missing_return
                                   validator: (input) {
                                     if (input.isEmpty) return 'Enter Name';
                                   },
@@ -170,6 +168,7 @@ VerifyScreen()));
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
                                   cursorColor: yellow1,
+                                  // ignore: missing_return
                                   validator: (input) {
                                     if (input.isEmpty) return 'Enter Email';
                                   },
@@ -194,6 +193,7 @@ VerifyScreen()));
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
                                   cursorColor: yellow1,
+                                  // ignore: missing_return
                                   validator: (input) {
                                     if (input.length < 6)
                                       return 'Provide Minimum 6 Character';
@@ -221,6 +221,7 @@ VerifyScreen()));
                                 padding: const EdgeInsets.all(3.0),
                                 child: DropdownButtonFormField<String>(
 
+                                  // ignore: missing_return
                                   validator: (input) {
                                     if (input == null) return 'Enter Gender';
                                   },
@@ -262,6 +263,7 @@ VerifyScreen()));
                                 child: TextFormField(
                                   maxLength: 10,
                                     cursorColor: yellow1,
+                                  // ignore: missing_return
                                   validator: (input) {
                                     bool checkSpecial = isSpecial(input);
                                     if (input.isEmpty ||
@@ -295,6 +297,7 @@ VerifyScreen()));
                               child: TextFormField(
                                   maxLength: 3,
                                   cursorColor: yellow1,
+                                  // ignore: missing_return
                                   validator: (input) {
                                     bool checkSpecial = isSpecial(input);
                                     //Parse INT works only inside IF not outside
@@ -328,6 +331,7 @@ VerifyScreen()));
                               child: TextFormField(
                                 maxLength: 12,
                                   cursorColor: yellow1,
+                                  // ignore: missing_return
                                   validator: (input) {
                                     bool checkSpecial = isSpecial(input);
                                     if (input.isEmpty ||
@@ -349,6 +353,7 @@ VerifyScreen()));
                           ),
                         ),
                         SizedBox(height: 20),
+                        // ignore: deprecated_member_use
                         RaisedButton(
                           padding: EdgeInsets.fromLTRB(70, 15, 70, 15),
                           onPressed: signUp,
@@ -384,6 +389,4 @@ VerifyScreen()));
   }
 }
 
-// validator: (val) =>
-// val.length < 6 ?
-// 'Still too short' : null
+
