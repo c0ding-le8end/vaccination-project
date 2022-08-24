@@ -13,7 +13,7 @@ class HospitalDetails extends StatefulWidget {
   final String district;
   final String state;
   final String vaccine;
-  final List<String> slots;
+  final List<dynamic> slots;
   final int dose1;
   final String vStatus;
   final String vType;
@@ -44,7 +44,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
   final String _district;
   final String _state;
   final String _vaccine;
-  final List<String> _slots;
+  final List<dynamic> _slots;
   final int _dose1;
   final String _vStatus;
   final String _vType;
@@ -62,6 +62,11 @@ class _HospitalDetailsState extends State<HospitalDetails> {
       this._vStatus,
       this._vType, this._dose1Date, this.scheduleDate
       );
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +149,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "${_slots[index]}",
+                                        "${_slots[index]['time']}",
                                         style: TextStyle(fontSize: 20,color: paleGrey),
                                       ),
                                       Row(
