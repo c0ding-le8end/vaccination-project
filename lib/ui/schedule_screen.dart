@@ -130,7 +130,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   String district = snapshot.data.sessions[index].districtName;
                   String state = snapshot.data.sessions[index].stateName;
                   String vaccine = snapshot.data.sessions[index].vaccine;
-                  List<String> slots = snapshot.data.sessions[index].slots;
+                  List<dynamic> slots = snapshot.data.sessions[index].slots;
                   int dose = vStatus == 'Not Vaccinated'
                       ? snapshot.data.sessions[index].availableCapacityDose1
                       : snapshot.data.sessions[index].availableCapacityDose2;

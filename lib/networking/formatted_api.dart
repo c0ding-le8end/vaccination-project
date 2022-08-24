@@ -42,7 +42,7 @@ class Sessions {
   String fee;
   int minAgeLimit;
   String vaccine;
-  List<String> slots;
+  List<dynamic> slots;
 
   Sessions(
       {this.centerId,
@@ -88,7 +88,8 @@ class Sessions {
     fee = json['fee'];
     minAgeLimit = json['min_age_limit'];
     vaccine = json['vaccine'];
-    slots = json['slots'].cast<String>();
+    slots = json['slots'];
+    print(slots);
   }
 
   Map<String, dynamic> toJson() {
