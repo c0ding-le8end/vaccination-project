@@ -12,7 +12,7 @@ class ResetScreen extends StatefulWidget {
 }
 
 class _ResetScreenState extends State<ResetScreen> {
-  String _email;
+  String? _email;
   final auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
 var emailException;
@@ -31,7 +31,7 @@ var emailException;
                   borderRadius: BorderRadius.circular(20),),
                 // ignore: missing_return
                 child: TextFormField(validator: (value) {
-                  if (value.isEmpty) return 'Enter Email';
+                  if (value!.isEmpty) return 'Enter Email';
 
                 },
                   keyboardType: TextInputType.emailAddress,
@@ -50,13 +50,13 @@ var emailException;
             ),
             Center(
               // ignore: deprecated_member_use
-              child: RaisedButton(
+              child: ElevatedButton(
                 child: Text('Send Request'),
                 onPressed: () async{
 
-                 if(_emailKey.currentState.validate()) {
+                 if(_emailKey.currentState!.validate()) {
                    try {
-                    await auth.sendPasswordResetEmail(email: _email);
+                    await auth.sendPasswordResetEmail(email: _email!);
 
                      showDialog(context: context, builder: (context) {
                        return AlertDialog(
@@ -65,7 +65,7 @@ var emailException;
                              "A link has been sent to your email to reset the password."),
                          actions: <Widget>[
                            // ignore: deprecated_member_use
-                           FlatButton(
+                           TextButton(
                                onPressed: () {
                                  Navigator.of(context).pop();
                                  Navigator.of(context).pop();
@@ -76,10 +76,10 @@ var emailException;
                      });
 
                    }
-                  catch
+                  on FirebaseAuthException catch
                   (e)
                   {
-                    showError(e.message);
+                    showError(e.message.toString());
 
                   }
 
@@ -103,7 +103,7 @@ var emailException;
             content: Text(errormessage),
             actions: <Widget>[
               // ignore: deprecated_member_use
-              FlatButton(
+              TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

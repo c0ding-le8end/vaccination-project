@@ -7,19 +7,19 @@ import 'package:vaccination_portal/util/global_variables.dart';
 // ignore: must_be_immutable
 class HospitalDetails extends StatefulWidget {
   final scheduleDate;
-  final String hospitalName;
-  final String hospitalAddress;
-  final String block;
-  final String district;
-  final String state;
-  final String vaccine;
-  final List<dynamic> slots;
-  final int dose1;
-  final String vStatus;
-  final String vType;
+  final String? hospitalName;
+  final String? hospitalAddress;
+  final String? block;
+  final String? district;
+  final String? state;
+  final String? vaccine;
+  final List<dynamic>? slots;
+  final int? dose1;
+  final String? vStatus;
+  final String? vType;
   var dose1Date;
    HospitalDetails(
-      {Key key,
+      {Key? key,
         this.scheduleDate,
       this.hospitalName,
       this.hospitalAddress,
@@ -32,8 +32,8 @@ class HospitalDetails extends StatefulWidget {
       : super(key: key);
 
   @override
-  _HospitalDetailsState createState() => _HospitalDetailsState(hospitalName,
-      hospitalAddress, district, state, slots, dose1, block, vaccine,vStatus,vType,dose1Date,scheduleDate);
+  _HospitalDetailsState createState() => _HospitalDetailsState(hospitalName!,
+      hospitalAddress!, district!, state!, slots!, dose1!, block!, vaccine!,vStatus!,vType!,dose1Date,scheduleDate);
 }
 
 class _HospitalDetailsState extends State<HospitalDetails> {
@@ -201,7 +201,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
   ScheduleDate() async {
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(userDetails.uid)
+        .doc(userDetails!.uid)
         .set({"name": userName, "hospitalName": _hospitalName});
   }
 
@@ -214,13 +214,13 @@ class _HospitalDetailsState extends State<HospitalDetails> {
       ),
       actions: [
         // ignore: deprecated_member_use
-        FlatButton(
+        TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
             child: Text('Cancel',style: TextStyle(color: lightGrey,))),
         // ignore: deprecated_member_use
-        FlatButton(
+        TextButton(
             onPressed: () async {
               var dose1Status;
               var vaccinationDate= scheduleDate;
@@ -231,7 +231,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                 {debugPrint("$_dose1");
                   await FirebaseFirestore.instance
                       .collection("users")
-                      .doc(userDetails.uid)
+                      .doc(userDetails!.uid)
                       .update({
                     "Vaccine": {
                       "dose1": {"status": "Partially Vaccinated"},
@@ -248,7 +248,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                   debugPrint("$_dose1");
                 await FirebaseFirestore.instance
                     .collection("users")
-                    .doc(userDetails.uid)
+                    .doc(userDetails!.uid)
                     .update({
                 "Vaccine": {
                 "dose1": {"status": "Fully Vaccinated"},

@@ -15,14 +15,14 @@ class VerifyScreen extends StatefulWidget {
 
 class _VerifyScreenState extends State<VerifyScreen> {
   final auth = FirebaseAuth.instance;
-  User user;
-  Timer timer,verifier;
+  User? user;
+  Timer? timer,verifier;
   int stopClock=60;
   @override
   void initState() {
 
     user = auth.currentUser;
-    user.sendEmailVerification();
+    user!.sendEmailVerification();
 
     verifier = Timer.periodic(Duration(seconds: 1), (verifier) {
 setState(() {
@@ -32,8 +32,8 @@ setState(() {
     });
 
     timer=Timer(Duration(seconds: 60),() async{
-      await user.delete();
-      FirebaseFirestore.instance.collection("users").doc(user.uid).delete();
+      await user!.delete();
+      FirebaseFirestore.instance.collection("users").doc(user!.uid).delete();
       Navigator.pop(context);
     });
 
@@ -42,8 +42,8 @@ setState(() {
 
   @override
   void dispose() {
-    verifier.cancel();
-    timer.cancel();
+    verifier!.cancel();
+    timer!.cancel();
     super.dispose();
   }
 
@@ -53,9 +53,10 @@ setState(() {
     return WillPopScope(
       // ignore: missing_return
       onWillPop: () async
-      {await user.delete();
-        FirebaseFirestore.instance.collection("users").doc(user.uid).delete();
+      {await user!.delete();
+        FirebaseFirestore.instance.collection("users").doc(user!.uid).delete();
         Navigator.pop(context);
+        return false;
       },
       child: Scaffold(
         body: Padding(
@@ -66,12 +67,15 @@ setState(() {
                 children: [
                   Center(
                     child: Text(
-                        'An email has been sent to ${user.email} please verify'),
+                        'An email has been sent to ${user!.email} please verify'),
                   ),
                   // ignore: deprecated_member_use
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(shape: ContinuousRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(18)),),
                     onPressed: () {
-                      print(user.sendEmailVerification());
+                      print(user!.sendEmailVerification());
                     },
                     child: Text(
                         "Resend Email",
@@ -80,9 +84,6 @@ setState(() {
                           fontSize: 14,
                           //    color: Colors.white),
                         )),
-                    shape: ContinuousRectangleBorder(
-                        borderRadius:
-                        BorderRadius.circular(18)),
                   ),
                     Text("$stopClock",style: TextStyle
                     (fontSize: 20,fontWeight: FontWeight.bold,),)
@@ -98,10 +99,10 @@ setState(() {
 
   Future<void> checkEmailVerified() async {
     user = auth.currentUser;
-    await user.reload();
-    if (user.emailVerified) {
-      verifier.cancel();
-      timer.cancel();
+    await user!.reload();
+    if (user!.emailVerified) {
+      verifier!.cancel();
+      timer!.cancel();
       Navigator.pushReplacementNamed(context, "/");
     }
   }

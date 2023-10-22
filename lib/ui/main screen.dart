@@ -12,12 +12,9 @@ import 'package:vaccination_portal/ui/vaccine_type.dart';
 import 'package:vaccination_portal/util/global_variables.dart';
 import 'Certificate.dart';
 
-
-
-
 class MainScreen extends StatefulWidget {
   const MainScreen({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -25,13 +22,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  Future<VaccineObject> vList;
+  Future<VaccineObject>? vList;
   bool shouldPop = true;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  User user;
+  User? user;
   bool isloggedin = false;
-  Stream<DocumentSnapshot> userStream;
+  Stream<DocumentSnapshot>? userStream;
 
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
@@ -42,9 +39,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   getUser() async {
-    User firebaseUser = _auth.currentUser;
+    User firebaseUser = _auth.currentUser!;
     await firebaseUser?.reload();
-    firebaseUser = _auth.currentUser;
+    firebaseUser = _auth.currentUser!;
 
     if (firebaseUser != null) {
       setState(() {
@@ -89,25 +86,34 @@ class _MainScreenState extends State<MainScreen> {
             builder: (context) {
               return AlertDialog(
                 content: Container(
-                  child: Text("SignOut ?",style: TextStyle(color: darkGrey,fontWeight: FontWeight.bold)),
+                  child: Text("SignOut ?",
+                      style: TextStyle(
+                          color: darkGrey, fontWeight: FontWeight.bold)),
                 ),
                 actions: [
                   // ignore: deprecated_member_use
-                  FlatButton(
+                  TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Cancel',style: TextStyle(color: lightGrey,))),
+                      child: Text('Cancel',
+                          style: TextStyle(
+                            color: lightGrey,
+                          ))),
                   // ignore: deprecated_member_use
-                  FlatButton(
+                  TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                         signOut();
                       },
-                      child: Text('Ok',style: TextStyle(color: lightGrey,))),
+                      child: Text('Ok',
+                          style: TextStyle(
+                            color: lightGrey,
+                          ))),
                 ],
               );
             });
+        return false;
       },
       child: Builder(builder: (context) {
         return Scaffold(
@@ -197,7 +203,7 @@ class _MainScreenState extends State<MainScreen> {
             body: StreamBuilder<DocumentSnapshot>(
                 stream: userStream,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data.data() != null)
+                  if (snapshot.hasData && snapshot.data!.data() != null)
                     return userCard(context, snapshot);
                   else
                     return Center(child: CircularProgressIndicator());
@@ -211,7 +217,8 @@ class _MainScreenState extends State<MainScreen> {
 
   Container userCard(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    Map<String, dynamic> documentFields = snapshot.data.data();
+    Map<String, dynamic> documentFields =
+        snapshot.data!.data() as Map<String, dynamic>;
     var name = documentFields['details']['name'];
     userName = name;
     var phoneNumber = documentFields['details']['phoneNumber'];
@@ -222,10 +229,8 @@ class _MainScreenState extends State<MainScreen> {
     var dose2Date = documentFields['Vaccine']['dose2Date'];
     var vaccineType = documentFields['Vaccine']['vaccineType'];
     var gender = documentFields['details']['gender'];
-    var doseStyle = TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15);
+    var doseStyle =
+        TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 15);
     var vaccinationStatusStyle = TextStyle(color: paleGrey);
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -301,12 +306,13 @@ class _MainScreenState extends State<MainScreen> {
                                 fontSize: 20,
                               )),
                           Icon(
-                              documentFields['details']['gender'] == 'Male'
-                                  ? FontAwesomeIcons.male
-                                  : (documentFields['details']['gender'] ==
-                                          'Other'
-                                      ? FontAwesomeIcons.transgender
-                                      : FontAwesomeIcons.female),color: lightGrey,
+                            documentFields['details']['gender'] == 'Male'
+                                ? FontAwesomeIcons.male
+                                : (documentFields['details']['gender'] ==
+                                        'Other'
+                                    ? FontAwesomeIcons.transgender
+                                    : FontAwesomeIcons.female),
+                            color: lightGrey,
                           )
                         ],
                       ),
@@ -353,7 +359,7 @@ class _MainScreenState extends State<MainScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          "Aadhaar ID: ${aadharNumber.substring(0,4)}-${aadharNumber.substring(4,8)}-${aadharNumber.substring(8,12)}",
+                          "Aadhaar ID: ${aadharNumber.substring(0, 4)}-${aadharNumber.substring(4, 8)}-${aadharNumber.substring(8, 12)}",
                           style: TextStyle(fontSize: 17, color: paleGrey),
                         ),
                       ],
@@ -388,8 +394,12 @@ class _MainScreenState extends State<MainScreen> {
                             Padding(
                               padding: const EdgeInsets.only(left: 160.0),
                               // ignore: deprecated_member_use
-                              child: RaisedButton(
-                                elevation: 8,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 8,
+                                  shape: ContinuousRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18)),
+                                ),
                                 onPressed: status == 'Not Vaccinated'
                                     ? () {
                                         Navigator.push(
@@ -410,8 +420,6 @@ class _MainScreenState extends State<MainScreen> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
                                         color: darkGrey)),
-                                shape: ContinuousRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18)),
                               ),
                             ),
                           ],
@@ -427,7 +435,8 @@ class _MainScreenState extends State<MainScreen> {
                                     0
                                 ? "Vaccinated on $dose1Date"
                                 : "      Vaccination Scheduled on $dose1Date"),
-                        style: vaccinationStatusStyle,textAlign: TextAlign.center,
+                        style: vaccinationStatusStyle,
+                        textAlign: TextAlign.center,
                       ),
                     ),
                     //Appointment Status
@@ -466,8 +475,12 @@ class _MainScreenState extends State<MainScreen> {
                             Padding(
                               padding: const EdgeInsets.only(left: 160.0),
                               // ignore: deprecated_member_use
-                              child: RaisedButton(
-                                elevation: 8,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 8,
+                                  shape: ContinuousRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18)),
+                                ),
                                 // disabledColor: paleGrey,
                                 onPressed: documentFields['Vaccine']['dose2']
                                                 ['status'] ==
@@ -496,8 +509,6 @@ class _MainScreenState extends State<MainScreen> {
                                         color: darkGrey
                                         //    color: Colors.white),
                                         )),
-                                shape: ContinuousRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18)),
                               ),
                             ),
                           ],
@@ -513,14 +524,20 @@ class _MainScreenState extends State<MainScreen> {
                                     0
                                 ? "Vaccinated on $dose2Date,"
                                 : "      Vaccination Scheduled on $dose2Date"),
-                        style: vaccinationStatusStyle,textAlign: TextAlign.center,
+                        style: vaccinationStatusStyle,
+                        textAlign: TextAlign.center,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 50.0),
                       // ignore: deprecated_member_use
-                      child: RaisedButton(
-                        disabledColor: Colors.transparent,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          disabledBackgroundColor: Colors.transparent,
+                          backgroundColor: yellow1,
+                          shape: ContinuousRectangleBorder(
+                              borderRadius: BorderRadius.circular(18)),
+                        ),
                         onPressed: documentFields['Vaccine']['dose2']
                                     ['status'] !=
                                 'Fully Vaccinated'
@@ -544,10 +561,9 @@ class _MainScreenState extends State<MainScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
+                                  color: Colors.black
                                   //    color: Colors.white),
                                 )),
-                        shape: ContinuousRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
                       ),
                     ),
                   ],

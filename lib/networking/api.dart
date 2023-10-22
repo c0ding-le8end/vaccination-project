@@ -11,15 +11,15 @@ class VaccineData
 {
 
 
-  Future<VaccineObject> getdata({String pincode, var date}) async
+  Future<VaccineObject> getdata({String? pincode, var date}) async
   {
     var today = DateGet.getCurrentDate();
     //var newDate=Date_Get.getNewDate(0);
     var newDate= date==null?DateGet.getNewDate(0):date;
-    var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+pincode+"&date="+newDate;
+    var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+pincode!+"&date="+newDate;
     print("$url");
     //var url="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=%22+pincode+%22&date=%22+$today";
-    Response response=await get(Uri.encodeFull(url));
+    Response response=await get(Uri.parse(url));
     if(response.statusCode==200)
     {
       return VaccineObject.fromJson(json.decode(response.body));

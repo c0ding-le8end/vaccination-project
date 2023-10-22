@@ -16,7 +16,7 @@ class _SignUpState extends State<SignUp> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _name, _email, _password, _gender, _phoneNumber, _age, _aadharNumber;
+  String? _name, _email, _password, _gender, _phoneNumber, _age, _aadharNumber;
 
   checkAuthentication() async {
     _auth.authStateChanges().listen((user) async {
@@ -35,19 +35,19 @@ VerifyScreen()));
   }
 
   signUp() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
       try {
         UserCredential user = await _auth.createUserWithEmailAndPassword(
-            email: _email, password: _password);
+            email: _email!, password: _password!);
         if (user != null) {
-          await _auth.currentUser.updateProfile(displayName: _name);
-          userDetails = user.user;
+          await _auth.currentUser!.updateProfile(displayName: _name);
+          userDetails = user.user!;
           statusIndex=0;
           await FirebaseFirestore.instance
               .collection("users")
-              .doc(userDetails.uid)
+              .doc(userDetails!.uid)
               .set({
             "details": {
               "name": _name,
@@ -70,8 +70,8 @@ VerifyScreen()));
           // await Navigator.pushReplacementNamed(context,"/") ;
 
         }
-      } catch (e) {
-        showError(e.message);
+      } on FirebaseAuthException catch (e) {
+        showError(e.message.toString());
         print(e);
       }
     }
@@ -86,7 +86,7 @@ VerifyScreen()));
             content: Text(errormessage),
             actions: <Widget>[
               // ignore: deprecated_member_use
-              FlatButton(
+              ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -103,7 +103,8 @@ VerifyScreen()));
       onWillPop: () async
       {
         await Navigator.pushReplacementNamed(context,"Login") ;
-      },
+      return false;
+        },
       child: Scaffold(
         appBar: AppBar(
           title: Text("Sign Up",
@@ -111,6 +112,7 @@ VerifyScreen()));
                   fontFamily: 'OpenSans',
                   fontWeight: FontWeight.w900,
                   fontSize: 27,
+                  color: Colors.white,
                   fontStyle: FontStyle.normal,
                   letterSpacing: 3)),
           centerTitle: true,
@@ -142,7 +144,7 @@ VerifyScreen()));
                                 cursorColor: yellow1,
                                   // ignore: missing_return
                                   validator: (input) {
-                                    if (input.isEmpty) return 'Enter Name';
+                                    if (input!.isEmpty) return 'Enter Name';
                                   },
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
@@ -170,7 +172,7 @@ VerifyScreen()));
                                   cursorColor: yellow1,
                                   // ignore: missing_return
                                   validator: (input) {
-                                    if (input.isEmpty) return 'Enter Email';
+                                    if (input!.isEmpty) return 'Enter Email';
                                   },
                                   decoration: InputDecoration(
                                       labelStyle: TextStyle(color : lightGrey,fontFamily: "OpenSans",fontWeight: FontWeight.bold),
@@ -195,7 +197,7 @@ VerifyScreen()));
                                   cursorColor: yellow1,
                                   // ignore: missing_return
                                   validator: (input) {
-                                    if (input.length < 6)
+                                    if (input!.length < 6)
                                       return 'Provide Minimum 6 Character';
                                   },
                                   decoration: InputDecoration(
@@ -236,7 +238,7 @@ VerifyScreen()));
                                   iconSize: 24,
                                   elevation: 16,
                                   style: const TextStyle(color: Color(0xFF344955)),
-                                  onChanged: (String newValue) {
+                                  onChanged: (String? newValue) {
                                     setState(() {
                                       _gender = newValue;
                                     });
@@ -265,7 +267,7 @@ VerifyScreen()));
                                     cursorColor: yellow1,
                                   // ignore: missing_return
                                   validator: (input) {
-                                    bool checkSpecial = isSpecial(input);
+                                    bool checkSpecial = isSpecial(input!);
                                     if (input.isEmpty ||
                                         input.length != 10 ||
                                         checkSpecial) return 'Enter Valid Phone Number';
@@ -299,7 +301,7 @@ VerifyScreen()));
                                   cursorColor: yellow1,
                                   // ignore: missing_return
                                   validator: (input) {
-                                    bool checkSpecial = isSpecial(input);
+                                    bool checkSpecial = isSpecial(input!);
                                     //Parse INT works only inside IF not outside
                                     if (input.isEmpty ||
                                         input.length > 3 ||
@@ -333,7 +335,7 @@ VerifyScreen()));
                                   cursorColor: yellow1,
                                   // ignore: missing_return
                                   validator: (input) {
-                                    bool checkSpecial = isSpecial(input);
+                                    bool checkSpecial = isSpecial(input!);
                                     if (input.isEmpty ||
                                         input.length != 12 ||
                                         checkSpecial)
@@ -354,8 +356,11 @@ VerifyScreen()));
                         ),
                         SizedBox(height: 20),
                         // ignore: deprecated_member_use
-                        RaisedButton(
-                          padding: EdgeInsets.fromLTRB(70, 15, 70, 15),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(padding: EdgeInsets.fromLTRB(70, 15, 70, 15),backgroundColor: yellow1,
+                            shape:RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),),
                           onPressed: signUp,
                           child: Text('Sign Up',
                               style: TextStyle(
@@ -363,11 +368,8 @@ VerifyScreen()));
                                   fontFamily: "OpenSans",
                                   letterSpacing: 1,
                                   fontSize: 22.0,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold)),
-                          color: yellow1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
                         )
                       ],
                     ),

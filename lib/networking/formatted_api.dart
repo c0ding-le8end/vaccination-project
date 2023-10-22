@@ -1,13 +1,13 @@
 class VaccineObject {
-  List<Sessions> sessions;
+  List<Sessions>? sessions;
 
   VaccineObject({this.sessions});
 
   VaccineObject.fromJson(Map<String, dynamic> json) {
     if (json['sessions'] != null) {
-      sessions = new List<Sessions>();
+      sessions = <Sessions>[];
       json['sessions'].forEach((v) {
-        sessions.add(new Sessions.fromJson(v));
+        sessions!.add(new Sessions.fromJson(v));
       });
     }
   }
@@ -15,34 +15,34 @@ class VaccineObject {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.sessions != null) {
-      data['sessions'] = this.sessions.map((v) => v.toJson()).toList();
+      data['sessions'] = this.sessions!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Sessions {
-  int centerId;
-  String name;
-  String address;
-  String stateName;
-  String districtName;
-  String blockName;
-  int pincode;
-  String from;
-  String to;
-  int lat;
-  int long;
-  String feeType;
-  String sessionId;
-  String date;
-  int availableCapacityDose1;
-  int availableCapacityDose2;
-  int availableCapacity;
-  String fee;
-  int minAgeLimit;
-  String vaccine;
-  List<dynamic> slots;
+  int? centerId;
+  String? name;
+  String? address;
+  String? stateName;
+  String? districtName;
+  String? blockName;
+  int? pincode;
+  String? from;
+  String? to;
+  int? lat;
+  int? long;
+  String? feeType;
+  String? sessionId;
+  String? date;
+  int? availableCapacityDose1;
+  int? availableCapacityDose2;
+  int? availableCapacity;
+  String? fee;
+  int? minAgeLimit;
+  String? vaccine;
+  List<dynamic>? slots;
 
   Sessions(
       {this.centerId,

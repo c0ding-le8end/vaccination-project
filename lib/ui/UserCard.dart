@@ -14,7 +14,7 @@ class UserCard
 {
   Container userCard(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    Map<String, dynamic> documentFields = snapshot.data.data();
+    Map<String, dynamic> documentFields = snapshot.data!.data() as Map<String, dynamic>;
     var name = documentFields['details']['name'];
     userName = name;
     var phoneNumber = documentFields['details']['phoneNumber'];
@@ -189,8 +189,10 @@ class UserCard
                             Padding(
                               padding: const EdgeInsets.only(left: 160.0),
                               // ignore: deprecated_member_use
-                              child: RaisedButton(
-                                elevation: 8,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(elevation: 8,
+                                shape: ContinuousRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18)),backgroundColor: yellow1),
                                 onPressed: status == 'Not Vaccinated'
                                     ? () {
                                   Navigator.push(
@@ -212,8 +214,6 @@ class UserCard
                                         fontSize: 14,color: darkGrey
 
                                     )),
-                                shape: ContinuousRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18)),
                               ),
                             ),
                           ],
@@ -265,8 +265,10 @@ class UserCard
                             Padding(
                               padding: const EdgeInsets.only(left: 160.0),
                               // ignore: deprecated_member_use
-                              child: RaisedButton(
-                                elevation: 8,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(elevation: 8,
+                                  shape: ContinuousRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18)),),
                                 // disabledColor: paleGrey,
                                 onPressed: documentFields['Vaccine']['dose2']
                                 ['status'] ==
@@ -295,8 +297,6 @@ class UserCard
                                         color: darkGrey
                                       //    color: Colors.white),
                                     )),
-                                shape: ContinuousRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18)),
                               ),
                             ),
                           ],
@@ -312,8 +312,10 @@ class UserCard
                     Padding(
                       padding: const EdgeInsets.only(top: 50.0),
                       // ignore: deprecated_member_use
-                      child: RaisedButton(
-                        disabledColor: Colors.transparent,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(disabledBackgroundColor: Colors.transparent,
+                          shape: ContinuousRectangleBorder(
+                              borderRadius: BorderRadius.circular(18)),),
                         onPressed: documentFields['Vaccine']['dose2']
                         ['status'] !=
                             'Fully Vaccinated'
@@ -339,8 +341,6 @@ class UserCard
                               fontSize: 14,
                               //    color: Colors.white),
                             )),
-                        shape: ContinuousRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
                       ),
                     ),
                   ],

@@ -22,12 +22,12 @@ class ScheduleScreen extends StatefulWidget {
   final dose1Date;
 
   const ScheduleScreen(
-      {this.vStatus,
-      Key key,
-      this.pincode,
-      this.currentDate,
-      this.vaccineType,
-      this.todayDate,
+      {this.vStatus="",
+      Key? key,
+      this.pincode="",
+      this.currentDate="",
+      this.vaccineType="",
+      this.todayDate=0,
       this.dose1Date})
       : super(key: key);
 
@@ -37,7 +37,7 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  Future<VaccineObject> vlist;
+  Future<VaccineObject>? vlist;
   final String _pincode;
   final  String _currentDate;
   final String vStatus;
@@ -49,12 +49,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   _ScheduleScreenState(this._pincode, this._currentDate, this.vStatus,
       this._vaccineType, this._todayDate, this._dose1Date);
 
-  @override
-  // TODO: implement widget
-  // ignore: missing_return
-  ScheduleScreen get widget {
-    super.widget;
-  }
 
   @override
   void initState() {
@@ -250,6 +244,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         ));
   }
 
-  Future<VaccineObject> getpincode({String pincode, String date}) =>
+  Future<VaccineObject> getpincode({String? pincode, String? date}) =>
       VaccineData().getdata(pincode: pincode, date: date);
 }

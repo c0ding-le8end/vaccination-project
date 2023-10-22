@@ -1,6 +1,5 @@
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vaccination_portal/ui/main%20screen.dart';
 import 'package:vaccination_portal/ui/sign_in.dart';
@@ -41,9 +40,23 @@ class MyApp extends StatelessWidget {
       scaffoldBackgroundColor: Color(0xFFF3F3F3),
       //  backgroundColor: Color(0xFFF344955),
       primaryColor: Color(0xFF344955),
+      appBarTheme: AppBarTheme(color:Color(0xFF344955),
+      foregroundColor: Colors.white,
+      iconTheme: IconThemeData(color: Colors.white),
+      titleTextStyle: TextStyle(color: Colors.white)),
       iconTheme: IconThemeData(
         color: Colors.green,
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (states) {
+          if (states.contains(MaterialState.disabled)) {
+            return paleGrey; // Set your disabled color here
+          }
+          return Color(0xFFF9AA33); // Set your normal color here
+        },
+      ),
+      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+      textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(fontWeight: FontWeight.bold,fontFamily: "OpenSans")))),
       buttonTheme: ButtonThemeData(
         disabledColor: paleGrey,
         buttonColor: Color(0xFFF9AA33),
@@ -74,16 +87,16 @@ class MyApp extends StatelessWidget {
 
   TextTheme getTextTheme(TextTheme base) {
     return base.copyWith(
-      headline6: base.headline6.copyWith(color: Colors.blue),
-      subtitle2: base.subtitle2.copyWith(
+      headline6: base.headline6!.copyWith(color: Colors.blue),
+      subtitle2: base.subtitle2!.copyWith(
           fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green),
-      bodyText2: base.bodyText2.copyWith(
+      bodyText2: base.bodyText2!.copyWith(
         fontWeight: FontWeight.bold,
         color: Color(0xFF232F34),
         fontFamily: "OpenSans",
       ),
       // body2: base.body2.copyWith(fontWeight: FontWeight.bold,color: Colors.pink,fontFamily:"Lobster"),
-      button: base.button.copyWith(
+      button: base.button!.copyWith(
           letterSpacing: 1,
           color: Color(0xFF232F34),
           fontFamily: "OpenSans",

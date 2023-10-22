@@ -9,17 +9,17 @@ import 'package:vaccination_portal/util/global_variables.dart';
 
 
 class Calender extends StatefulWidget {
-  final String vaccineType;
-  final int todayDate;
+  final String? vaccineType;
+  final int? todayDate;
   final dose1Date;
-  final String vStatus;
+  final String? vStatus;
 
-  const Calender({Key key, this.vaccineType, this.todayDate, this.dose1Date, this.vStatus})
+  const Calender({Key? key, this.vaccineType, this.todayDate, this.dose1Date, this.vStatus})
       : super(key: key);
 
   @override
   _CalenderState createState() =>
-      _CalenderState(vaccineType, todayDate, dose1Date,vStatus);
+      _CalenderState(vaccineType!, todayDate!, dose1Date,vStatus!);
 }
 
 class _CalenderState extends State<Calender> {
@@ -40,19 +40,19 @@ class _CalenderState extends State<Calender> {
       ),
       actions: <Widget>[
         // ignore: deprecated_member_use
-        FlatButton(
+        TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
             child: Text('Cancel',style: TextStyle(color: lightGrey,),)),
         // ignore: deprecated_member_use
-        FlatButton(
+        TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => ScheduleScreen(
-                        pincode: selectedPincode,
-                        currentDate: chosenDate,
+                        pincode: selectedPincode!,
+                        currentDate: chosenDate!,
                         vaccineType: _vaccineType,
                     vStatus: _vStatus,
                     dose1Date: _dose1Date,
@@ -65,12 +65,12 @@ class _CalenderState extends State<Calender> {
 }
 
 class RadioListBuilder extends StatefulWidget {
-  final int todayDate;
+  final int? todayDate;
 
-  const RadioListBuilder({Key key, this.todayDate}) : super(key: key);
+  const RadioListBuilder({Key? key, this.todayDate}) : super(key: key);
 
   @override
-  _RadioListBuilderState createState() => _RadioListBuilderState(todayDate);
+  _RadioListBuilderState createState() => _RadioListBuilderState(todayDate!);
 }
 
 class _RadioListBuilderState extends State<RadioListBuilder> {
@@ -106,12 +106,12 @@ class _RadioListBuilderState extends State<RadioListBuilder> {
         children: week
             .map((data) => RadioListTile(activeColor: yellow1,
                 title: Text(("${data.date}"),style: TextStyle(color: darkGrey,fontWeight: FontWeight.bold)),
-                value: data.index,
+                value: data.index!,
                 groupValue: id,
                 onChanged: (val) {
                   setState(() {
                     init_date = data.date;
-                    id = data.index;
+                    id = data.index!;
                   });
                   chosenDate = init_date;
                 }))
@@ -122,7 +122,7 @@ class _RadioListBuilderState extends State<RadioListBuilder> {
 }
 
 class DateObject {
-  int index;
+  int? index;
 
   DateObject({this.index, this.date});
 

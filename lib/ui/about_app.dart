@@ -29,11 +29,8 @@ class AboutApp
                   ),
                 ),
 // ignore: deprecated_member_use
-                RaisedButton(
-                    child: Text("Ok"),shape: ContinuousRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(18)
-                ),
+                ElevatedButton(
+                    child: Text("Ok"),
                     onPressed: () {
                       Navigator.pop(context);
                     }

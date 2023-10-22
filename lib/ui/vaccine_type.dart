@@ -4,13 +4,13 @@ import 'package:vaccination_portal/ui/pincode_choice.dart';
 
 
 class VaccineType extends StatefulWidget {
-  final String status;
+  final String? status;
   final dose1Date;
 
-  const VaccineType({Key key, this.status,this.dose1Date}) : super(key: key);
+  const VaccineType({Key? key, this.status,this.dose1Date}) : super(key: key);
 
   @override
-  _VaccineTypeState createState() => _VaccineTypeState(status,dose1Date);
+  _VaccineTypeState createState() => _VaccineTypeState(status!,dose1Date);
 }
 
 class _VaccineTypeState extends State<VaccineType> {
@@ -50,7 +50,7 @@ final _dose1Date;
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             // ignore: deprecated_member_use
-                            child: RaisedButton(
+                            child: ElevatedButton(
                               onPressed: () {
                                 Navigator.push(
                                     context,
@@ -65,7 +65,7 @@ final _dose1Date;
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             // ignore: deprecated_member_use
-                            child: RaisedButton(
+                            child: ElevatedButton(
                               onPressed: () {
                                 Navigator.push(
                                     context,

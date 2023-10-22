@@ -7,7 +7,7 @@ class Certificate extends StatelessWidget {
   final name, phoneNumber, age, aadharNumber, vaccineType, gender;
 
   const Certificate(
-      {Key key,
+      {Key? key,
         this.name,
         this.phoneNumber,
         this.age,

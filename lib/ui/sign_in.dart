@@ -16,7 +16,7 @@ class _LoginState extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var authenticator;
-  String _email, _password;
+  String? _email, _password;
 
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
@@ -35,14 +35,14 @@ class _LoginState extends State<Login> {
   }
 
   login() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
       try {
         await _auth.signInWithEmailAndPassword(
-            email: _email, password: _password);
-      } catch (e) {
-        showError(e.message);
+            email: _email!, password: _password!);
+      } on FirebaseAuthException catch (e) {
+        showError(e.message.toString());
         print(e);
       }
     }
@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
             content: Text(errormessage),
             actions: <Widget>[
               // ignore: deprecated_member_use
-              FlatButton(
+              ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -102,7 +102,7 @@ class _LoginState extends State<Login> {
                           child: TextFormField(cursorColor: yellow1,
                               // ignore: missing_return
                               validator: (input) {
-                                if (input.isEmpty) return 'Enter Email';
+                                if (input!.isEmpty) return 'Enter Email';
                               },
                               decoration: InputDecoration(
                                   labelText: 'Email',labelStyle: TextStyle(color : lightGrey,fontFamily: "OpenSans",fontWeight: FontWeight.bold),
@@ -116,7 +116,7 @@ class _LoginState extends State<Login> {
                           child: TextFormField(cursorColor: yellow1,
                               // ignore: missing_return
                               validator: (input) {
-                                if (input.length < 6)
+                                if (input!.length < 6)
                                   return 'Provide Minimum 6 Character';
                               },
                               decoration: InputDecoration(enabled: true,
@@ -138,12 +138,13 @@ class _LoginState extends State<Login> {
                       ),
 
                       // ignore: deprecated_member_use
-                      RaisedButton(
-                        padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(padding: EdgeInsets.fromLTRB(70, 10, 70, 10),backgroundColor: yellow1),
                         onPressed: login,
                         child: Text('Login',
                             style: TextStyle(
                               fontSize: 22.0,
+                              color: Colors.black
                               // fontWeight: FontWeight.bold
                             )),
 

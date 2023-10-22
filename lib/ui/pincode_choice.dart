@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:vaccination_portal/ui/schedule_screen.dart';
 import 'package:vaccination_portal/util/global_variables.dart';
 import '../util/get_date.dart';
 
 class Pincode extends StatefulWidget {
-  final String status;
-  final String vaccineType;
+  final String? status;
+  final String? vaccineType;
   final dose1Date;
 
-  const Pincode({this.status, Key key, this.vaccineType, this.dose1Date})
+  const Pincode({this.status, Key? key, this.vaccineType, this.dose1Date})
       : super(key: key);
 
   @override
-  _PincodeState createState() => _PincodeState(status, vaccineType, dose1Date);
+  _PincodeState createState() => _PincodeState(status!, vaccineType!, dose1Date);
 }
 
 class _PincodeState extends State<Pincode> {
   var _pincode;
-  Future vList;
+  Future? vList;
   var date;
-  final String vStatus;
-  final String _vaccineType;
+  final String? vStatus;
+  final String? _vaccineType;
   final _dose1Date;
 
   _PincodeState(this.vStatus, this._vaccineType, this._dose1Date);
@@ -91,9 +92,9 @@ class _PincodeState extends State<Pincode> {
                                         chosenDate=DateGet.getCurrentDate();
                                         return ScheduleScreen(
                                             pincode: _pincode,
-                                            vStatus: vStatus,
-
-                                            vaccineType: _vaccineType,
+                                            vStatus: vStatus!,
+                                            currentDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                                            vaccineType: _vaccineType!,
                                             dose1Date: _dose1Date);
                                       }));
                             });
